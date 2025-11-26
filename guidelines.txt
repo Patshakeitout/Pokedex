@@ -1,0 +1,4 @@
+- semantic html - no cascading divs
+- barrier free html5
+- JS: every function only 14 lines
+- camelCase syntax for JS
