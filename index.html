@@ -8,19 +8,47 @@
     <link rel="icon" type="image/png" href="./src/assets/media/favicon.png">
 
     <!-- Materialize CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/3.0.0/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/3.0.0/js/materialize.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="./src/styles/materialize.min.css" media="screen,projection" />
 
-    <!-- Global CSS -->
+    <!-- global.css -->
     <link rel="stylesheet" href="./src/styles/global.css">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous" defer></script>
+    <!-- Materialize JS-->
+    <script src="./src/js/materialize.min.js" defer></script>
+
+    <!-- main.js -->
+    <script src="./src/js/main.js" defer></script>
 </head>
 
 <body>
     <header>
         <img src="./src/assets/media/favicon.png" alt="Pokédex Logo">
         <h1>P O K É D E X</h1>
-        <input type="search" placeholder="Search Pokémon" class="btn-search browser-default">
+        <input type="search" placeholder="Search Pokémon" class="browser-default btn-search">
     </header>
+
+    <main>
+        <section class="card-grid" id="cardGrid"></section>
+    </main>
+
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <article>
+                <hgroup>
+                    <h2 id="modalTitle"></h2>
+                    <p class="modal-subtitle" id="modalSubtitle"></p>
+                </hgroup>
+                <p id="modalBody"></p>
+            </article>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
 
 </body>
 

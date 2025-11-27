@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    background-color: #f5f5f5;
 }
 
 header {
@@ -27,6 +28,92 @@ header input[type="search"] {
     height: 32px;
     padding-left: 0.5rem;
     border-radius: 32px;
+}
+
+main {
+    max-width: 85vw;
+    margin: 32px auto;
+}
+
+/* --- Card Grid --- */
+.card-grid {
+    display: grid;
+    /* Responsive Grid: Adjusts columns based on screen width */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+/* --- Card Style (Semantic <article>) --- */
+.card-grid article {
+    background-color: #fff;
+    border-radius: 8px; /* Material rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.05); /* Material shadow */
+    padding: 24px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-grid article:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.card-grid hgroup {
+    margin-bottom: 10px;
+}
+
+.card-grid h3 {
+    font-size: 1.2em;
+    color: #3f51b5; /* Primary Material color */
+    margin: 0;
+}
+
+.card-grid p {
+    font-size: 0.9em;
+    color: #616161;
+}
+
+/* --- Modal Style (<dialog>) --- */
+.modal {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 0 100vmax rgba(0,0,0,.5); /* Backdrop effect */
+    max-width: 600px;
+    padding: 0;
+}
+
+.modal-content {
+    padding: 30px;
+}
+
+.modal h2 {
+    color: #3f51b5;
+    margin-top: 0;
+}
+
+.modal-subtitle {
+    color: #616161;
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+.modal footer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+#modalCloseButton {
+    background-color: #3f51b5;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Dialog polyfill/fallback for browsers that don't fully support <dialog> */
+.modal:not([open]) {
+    display: none;
 }
 
 @media (max-width: 480px) {
