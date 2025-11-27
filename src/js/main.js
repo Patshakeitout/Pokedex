@@ -1,77 +1,120 @@
+/**
+ * @fileoverview main js for application
+ */
+
 const TEMPLATE_FILE = './src/templates/card-template.html';
 const TOTAL_CARDS = 30;
 
-// Funktion 1/9: Startpunkt, initialisiert Modal, lädt Template
+/**
+ * Initializes the app.
+ * Sets up Materialize Modals and starts loading the external card template.
+ *
+ * @function initializeApp
+ * @returns {void}
+ */
 const initializeApp = () => {
-    // 1. Materialize Modal initialisieren
     $('.modal').modal();
-    loadTemplateAndRender();
+    renderTemplate();
 };
 
-// Funktion 2/9: Lädt das Template asynchron
-const loadTemplateAndRender = () => {
+/**
+ * Main function 
+ * Asynchronously loads the external card template and handles the rendering process.
+ *
+ * @function renderTemplate
+ * @returns {void}
+ */
+const renderTemplate = () => {
     $.get(TEMPLATE_FILE)
-        .done(handleTemplateSuccess)
-        .fail(handleTemplateFailure);
+        .done((rawTemplate) => {
+            const template = rawTemplate.trim();
+            const generatedHtml = generateGridHtml(template);
+            
+            $('#cardGrid').html(generatedHtml);
+            bindEventListeners();
+        })
+        .fail(() => {
+            console.error(`Error with loading template ${TEMPLATE_FILE}.`);
+            $('#cardGrid').html('<p class="red-text">Loading of Card-template failed.</p>');
+        });
 };
 
-// Funktion 3/9: Erfolgs-Handler für den Template-Ladevorgang
-const handleTemplateSuccess = (rawTemplate) => {
-    const templateMarkup = rawTemplate.trim();
-    const generatedHtml = generateGridHtml(templateMarkup);
-    
-    $('#cardGrid').html(generatedHtml);
-    bindEventListeners();
-};
 
-// Funktion 4/9: Generiert das gesamte HTML-Markup
+/**
+ * Generates the full HTML markup for the card grid by looping a specified number of times.
+ *
+ * @param {string} templateMarkup - The raw HTML string of a single card template.
+ * @returns {string} The aggregated HTML string containing all rendered cards.
+ */
 const generateGridHtml = (templateMarkup) => {
-    let h = '';
+    let html = '';
     
+    // The constant TOTAL_CARDS must be defined elsewhere in the scope
     for (let i = 1; i <= TOTAL_CARDS; i++) {
-        h += renderSingleCard(templateMarkup, i);
+        html += populateCard(templateMarkup, i);
     }
     
-    return h;
+    return html;
 };
 
-// Funktion 5/9: Rendert eine einzelne Karte
-const renderSingleCard = (templateMarkup, id) => {
-    // Ersetze Platzhalter {{ID}} durch den aktuellen Schleifenwert
+
+/**
+ * Populates card (<article>) attributes (e.g., {{ID}}) with the given card ID.
+ *
+ * @param {string} templateMarkup - The raw HTML string containing the {{ID}} placeholders.
+ * @param {number} id - The current numerical ID to replace the placeholders with.
+ * @returns {string} The HTML string with all {{ID}} placeholders replaced.
+ */
+const populateCard = (templateMarkup, id) => {
     return templateMarkup.replace(/{{ID}}/g, id);
 };
 
-// Funktion 6/9: Fehler-Handler für den Template-Ladevorgang
-const handleTemplateFailure = () => {
-    console.error(`Fehler beim Laden des Templates von ${TEMPLATE_FILE}.`);
-    $('#cardGrid').html('<p class="red-text">Laden des Karten-Templates fehlgeschlagen.</p>');
-};
 
-// Funktion 7/9: Bindet alle Event-Handler (Delegation)
+/**
+ * Binds all necessary event handlers to the relevant DOM elements.
+ * * * It uses Event Delegation on the '#cardGrid' element because the cards 
+ * * are dynamically rendered.
+ *
+ * @function bindEventListeners
+ * @returns {void}
+ */
 const bindEventListeners = () => {
-    // 2. Event Delegation: Open Modal
+    // Event Delegation: Open Modal
     $('#cardGrid').on('click', '.card', handleCardClick);
-    // 3. Close Modal
     $('#modalCloseButton').on('click', handleModalClose);
 };
 
-// Funktion 8/9: Click-Handler für eine einzelne Karte (Öffnet Modal)
+
+/**
+ * Handles the click event on a card element within the grid.
+ * * It extracts data attributes from the clicked card, populates the modal content,
+ * * and then opens the Materialize modal.
+ *
+ * @param {Event} e - The jQuery click event object.
+ * @returns {void}
+ */
 const handleCardClick = (e) => {
-    const d = $(e.currentTarget).data(); // Datenattribute abrufen
+    const modalData = $(e.currentTarget).data(); 
+
+    $('#modalTitle').text(modalData.t);
+    $('#modalSubtitle').text(`ID: ${modalData.id} | ${modalData.sub}`);
+    $('#modalBody').text(modalData.body || 'No further text available.');
     
-    // Modal-Inhalt füllen
-    $('#modalTitle').text(d.t);
-    $('#modalSubtitle').text(`ID: ${d.id} | ${d.sub}`);
-    $('#modalBody').text(d.body || 'Kein weiterer Text verfügbar.');
-    
-    // Modal öffnen (Materialize/jQuery API)
+    // Opens the modal using the Materialize/jQuery API
     $('#cardModal').modal('open');
 };
 
-// Funktion 9/9: Close-Handler für das Modal
+
+/**
+ * Closes the Materialize modal window.
+ *
+ * @function handleModalClose
+ * @returns {void}
+ */
 const handleModalClose = () => {
     $('#cardModal').modal('close');
 };
 
-// Gesamte Logik starten, sobald das DOM vollständig geladen ist
+
+// Starts the entire app logic (initializeApp)
 $(document).ready(initializeApp);
