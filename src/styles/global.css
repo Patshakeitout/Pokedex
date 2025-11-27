@@ -35,12 +35,18 @@ main {
     margin: 32px auto;
 }
 
+
 /* --- Card Grid --- */
 .card-grid {
     display: grid;
     /* Responsive Grid: Adjusts columns based on screen width */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 24px;
+}
+
+.card {
+    aspect-ratio: 8 / 10;
+    min-height: auto;
 }
 
 /* --- Card Style (Semantic <article>) --- */
