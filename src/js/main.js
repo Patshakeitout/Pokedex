@@ -3,10 +3,10 @@
  */
 
 import { generateCardHtml } from './card-template.js';
+import { handleCardClick, handleModalClose } from './modal.js';
 
-const TOTAL_CARDS = 30;
-const URL_BASE = "https://pokeapi.co/api/v2/";
-const URL_OFFSET = "https://pokeapi.co/api/v2/pokemon?limit=30";
+const CARDS_TOTAL = 30;
+const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
 
 
 /**
@@ -35,14 +35,17 @@ const renderCards = (pokeData) => {
 };
 
 
-const fetchOffsetData = async (url, offset = 0) => {
-
-    const fullUrl = `${url}&offset=${encodeURIComponent(offset)}`;
-
+/**
+ * Fetches Data from API endpoint.
+ *
+ * @param {string} url URL string
+ * @returns {string} The parsed json.
+ */
+const fetchData = async (url) => {
     try {    
-        const res = await fetch(fullUrl);
+        const res = await fetch(url);
         const data = await res.json(); // step for parsing byte stream to json
-        return data.results;
+        return data;
     } catch (err) {
         console.error("Fetch failed:", err);
         return null;
@@ -50,23 +53,24 @@ const fetchOffsetData = async (url, offset = 0) => {
 };
 
 
-
 /**
  * Generates the full HTML markup for the card grid by looping a specified number of times.
  *
- * @param {array} pokeCardArr - Pokè json-array.
  * @returns {string} The aggregated HTML string containing all rendered cards.
  */
-const generateCards = (pokeCardArr) => {
+const generateCards = async () => {
     let htmlContent = "";
 
-    for (let id = 1; id <= TOTAL_CARDS; id++) {
-        const currentPokeData = pokeCardArr[id-1];
+    for (let id = 1; id <= CARDS_TOTAL; id++) {
 
-        // Security check
-        if (!currentPokeData) continue;
+        let currentUrl = `${URL_BASE}` + id; 
+        const currentPokeData = await fetchData(currentUrl); // Fetches json
+        if (!currentPokeData) continue; // Security check
+        
+        let name = currentPokeData.name;
+        //const pokeImage = currentPokeData.sprites.front_shiny      
 
-        htmlContent += generateCardHtml(id, currentPokeData.name)
+        htmlContent += generateCardHtml(id, name, pokeImage)
     }
 
     return htmlContent;
@@ -88,41 +92,11 @@ const bindEventListeners = () => {
 };
 
 
-/**
- * Handles the click event on a card element within the grid.
- * * It extracts data attributes from the clicked card, populates the modal content,
- * * and then opens the Materialize modal.
- *
- * @param {Event} e - The jQuery click event object.
- * @returns {void}
- */
-const handleCardClick = (e) => {
-    const modalData = $(e.currentTarget).data();
-
-    $('#modalTitle').text(modalData.t);
-    $('#modalSubtitle').text(`ID: ${modalData.id} | ${modalData.sub}`);
-    $('#modalBody').text(modalData.body || 'No further text available.');
-
-    // Opens the modal using the Materialize/jQuery API
-    $('#cardModal').modal('open');
-};
-
-
-/**
- * Closes the Materialize modal window.
- *
- * @function handleModalClose
- * @returns {void}
- */
-const handleModalClose = () => {
-    $('#cardModal').modal('close');
-};
-
-
 // Entire app logic
 $(document).ready(async () => {
     initApp();
 
-    let pokeData = await fetchOffsetData(URL_OFFSET);
-    renderCards(pokeData);
+    generateCards();
+
+    //renderCards(pokeData);
 });

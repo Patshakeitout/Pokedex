@@ -1,4 +1,5 @@
 // cardTemplate.js
+
 export const generateCardHtml = (id, name) => {
     return `
     <article class="card" data-id="${id}" data-t="${name} ${id}" data-sub="Category ${id}">
