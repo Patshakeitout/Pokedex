@@ -2,72 +2,75 @@
  * @fileoverview main js for application
  */
 
-const TEMPLATE_FILE = './src/templates/card-template.html';
+import { generateCardHtml } from './card-template.js';
+
 const TOTAL_CARDS = 30;
+const URL_BASE = "https://pokeapi.co/api/v2/";
+const URL_OFFSET = "https://pokeapi.co/api/v2/pokemon?limit=30";
+
 
 /**
- * Initializes the app.
- * Sets up Materialize Modals and starts loading the external card template.
+ * Inits the app, sets up Materialize Modals
  *
  * @function initializeApp
  * @returns {void}
  */
-const initializeApp = () => {
+const initApp = async () => {
     $('.modal').modal();
-    renderTemplate();
 };
 
+
 /**
- * Main function 
- * Asynchronously loads the external card template and handles the rendering process.
+ * Render cards and bind event listeners
  *
- * @function renderTemplate
+ * @function renderCards
+ * @param {array} pokeData - json response from API
  * @returns {void}
  */
-const renderTemplate = () => {
-    $.get(TEMPLATE_FILE)
-        .done((rawTemplate) => {
-            const template = rawTemplate.trim();
-            const generatedHtml = generateGridHtml(template);
-            
-            $('#cardGrid').html(generatedHtml);
-            bindEventListeners();
-        })
-        .fail(() => {
-            console.error(`Error with loading template ${TEMPLATE_FILE}.`);
-            $('#cardGrid').html('<p class="red-text">Loading of Card-template failed.</p>');
-        });
+const renderCards = (pokeData) => {
+    const generatedHtml = generateCards(pokeData);
+    $('#cardGrid').html(generatedHtml);
+    
+    bindEventListeners();
 };
+
+
+const fetchOffsetData = async (url, offset = 0) => {
+
+    const fullUrl = `${url}&offset=${encodeURIComponent(offset)}`;
+
+    try {    
+        const res = await fetch(fullUrl);
+        const data = await res.json(); // step for parsing byte stream to json
+        return data.results;
+    } catch (err) {
+        console.error("Fetch failed:", err);
+        return null;
+    }
+};
+
 
 
 /**
  * Generates the full HTML markup for the card grid by looping a specified number of times.
  *
- * @param {string} templateMarkup - The raw HTML string of a single card template.
+ * @param {array} pokeCardArr - Pokè json-array.
  * @returns {string} The aggregated HTML string containing all rendered cards.
  */
-const generateGridHtml = (templateMarkup) => {
-    let html = '';
-    
-    // The constant TOTAL_CARDS must be defined elsewhere in the scope
-    for (let i = 1; i <= TOTAL_CARDS; i++) {
-        html += populateCard(templateMarkup, i);
+const generateCards = (pokeCardArr) => {
+    let htmlContent = "";
+
+    for (let id = 1; id <= TOTAL_CARDS; id++) {
+        const currentPokeData = pokeCardArr[id-1];
+
+        // Security check
+        if (!currentPokeData) continue;
+
+        htmlContent += generateCardHtml(id, currentPokeData.name)
     }
-    
-    return html;
-};
 
-
-/**
- * Populates card (<article>) attributes (e.g., {{ID}}) with the given card ID.
- *
- * @param {string} templateMarkup - The raw HTML string containing the {{ID}} placeholders.
- * @param {number} id - The current numerical ID to replace the placeholders with.
- * @returns {string} The HTML string with all {{ID}} placeholders replaced.
- */
-const populateCard = (templateMarkup, id) => {
-    return templateMarkup.replace(/{{ID}}/g, id);
-};
+    return htmlContent;
+}
 
 
 /**
@@ -94,12 +97,12 @@ const bindEventListeners = () => {
  * @returns {void}
  */
 const handleCardClick = (e) => {
-    const modalData = $(e.currentTarget).data(); 
+    const modalData = $(e.currentTarget).data();
 
     $('#modalTitle').text(modalData.t);
     $('#modalSubtitle').text(`ID: ${modalData.id} | ${modalData.sub}`);
     $('#modalBody').text(modalData.body || 'No further text available.');
-    
+
     // Opens the modal using the Materialize/jQuery API
     $('#cardModal').modal('open');
 };
@@ -116,5 +119,10 @@ const handleModalClose = () => {
 };
 
 
-// Starts the entire app logic (initializeApp)
-$(document).ready(initializeApp);
+// Entire app logic
+$(document).ready(async () => {
+    initApp();
+
+    let pokeData = await fetchOffsetData(URL_OFFSET);
+    renderCards(pokeData);
+});
