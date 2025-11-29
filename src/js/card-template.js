@@ -1,10 +1,10 @@
 // cardTemplate.js
 
-export const generateCardHtml = (id, name) => {
+export const generateSingleCardHtml = (card) => {
     return `
-    <article class="card" data-id="${id}" data-t="${name} ${id}" data-sub="Category ${id}">
+    <article class="card" data-id="${card.id}" data-t="${card.name} ${card.id}" data-sub="Category ${card.id}">
         <hgroup>
-            <h3>${name} ${id}</h3>
+            <h3>${card.name} ${card.id}</h3>
         </hgroup>
         <p>Tap to expand...</p>
     </article>`;

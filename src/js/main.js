@@ -2,18 +2,19 @@
  * @fileoverview main js for application
  */
 
-import { generateCardHtml } from './card-template.js';
+import { fetchData, validateSchema } from './utils/helpers.js';
+import { generateSingleCardHtml } from './card-template.js';
 import { handleCardClick, handleModalClose } from './modal.js';
 
 const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
 const CARDS_TOTAL = 30;
 const CARD_SCHEMA = {
-    id: "na",
-    name: "na",
-    img: "na",
-    height: "na",
-    weight: "na",
-    baseExp: "na"
+    id: "number",
+    name: "string",
+    img: "string",
+    height: "number",
+    weight: "number",
+    baseExp: "number"
 };
 
 
@@ -29,70 +30,67 @@ const initApp = async () => {
 
 
 /**
- * Render cards and bind event listeners
+ * Renders cards and bind event listeners
  *
  * @function renderCards
- * @param {array} pokeData - json response from API
+ * @param {array} cards - Json Array of cards 
  * @returns {void}
  */
-const renderCards = (pokeData) => {
-    const generatedHtml = generateCards(pokeData);
-    $('#cardGrid').html(generatedHtml);
+const renderCards = (cards) => {
+    let allCardsHtml = '';
 
-    bindEventListeners();
-};
+    for (let card of cards) {
+        allCardsHtml += generateSingleCardHtml(card);
+        bindEventListeners();
+    };
 
+    // DOM injection
+    $('#cardGrid').append(allCardsHtml);
+}
 
-/**
- * Fetches Data from API endpoint.
- *
- * @param {string} url URL string
- * @returns {string} The parsed json.
- */
-const fetchData = async (url) => {
-    try {
-        const res = await fetch(url);
-        const data = await res.json(); // step for parsing byte stream to json
-        return data;
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        return null;
-    }
-};
 
 
 /**
- * Fetches data from API and composes cards array (data of all cards)
+ * Fetches data from API and returns json response
  *
+ * @function composeCardData
  * @returns {array} The cards array
  */
 const composeCardData = async () => {
-    //let htmlContent = "";
-
     let cards = [];
     for (let id = 1; id <= CARDS_TOTAL; id++) {
-
         let currentUrl = `${URL_BASE}` + id;
         const res = await fetchData(currentUrl); // Fetches 1st level json
         if (!res) continue; // Security check
-        
-        // A json counts as one line ;-)
-        let cardProps = { 
-            'id': id,
-            'name': res.name.toUpperCase(),
-            'img': res.sprites.front_shiny,
-            'height': res.height,
-            'weight': res.weight,
-            'baseExp': res.base_experience
-        }
 
-        cardProps = { ...CARD_SCHEMA, ...cardProps} // 
-        cards.push(cardProps);
-        // toDO: reduce line of function: cardProps assignment in sep function
-        //htmlContent += generateCardHtml(id)
+        cards.push(createCardProps(id, res));
     }
 
     return cards;
+}
+
+
+/**
+ * Fetches data from API and returns json response
+ *
+ * @function createCardProps
+ * @param id - The id of card or Pokèmon
+ * @param res - Response from API
+ * @returns {array} The cards array
+ */
+const createCardProps = (id, res) => {
+    // A json counts as one line ;-)
+    let cardProps = {
+        'id': id,
+        'name': res.name.toUpperCase(),
+        'img': res.sprites.front_shiny,
+        'height': res.height,
+        'weight': res.weight,
+        'baseExp': res.base_experience
+    }
+    cardProps = validateSchema(CARD_SCHEMA, cardProps) // schema validation
+
+    return cardProps;
 }
 
 
@@ -115,7 +113,9 @@ const bindEventListeners = () => {
 $(document).ready(async () => {
     initApp();
 
-    composeCardData();
+    // Aggregate Pokè data
+    let cards = await composeCardData();
 
-    //renderCards(pokeData);
+    // Rendering
+    renderCards(cards);
 });
