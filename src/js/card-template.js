@@ -6,6 +6,7 @@ export const generateSingleCardHtml = (card) => {
         <hgroup>
             <h3>${card.name} ${card.id}</h3>
         </hgroup>
+        <img src="${card.img}" alt="${card.name}" loading="lazy">
         <p>Tap to expand...</p>
     </article>`;
 }

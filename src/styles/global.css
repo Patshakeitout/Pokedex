@@ -1,6 +1,20 @@
 body {
     margin: 0;
-    background-color: #f5f5f5;
+    background-color: #1c1f24;
+}
+
+@font-face {
+    font-family: "pokemon-hollow";
+    src: url("../assets/fonts/pokemon-hollow.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "pokemon-solid";
+    src: url("../assets/fonts/pokemon-solid.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 header {
@@ -8,8 +22,8 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 16px 16px;
-    background-color: #f44336; /* Pokémon red */
-    color: white;
+    background-color: #121212; /* Pokémon red */
+    color: #f5f5f5;
 }
 
 header img {
@@ -17,6 +31,7 @@ header img {
 }
 
 header h1 {
+    font-family: "pokemon-solid";
     font-size: 1.2rem;
     font-weight: bold;
     margin: 0 1rem;
