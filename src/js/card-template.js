@@ -17,9 +17,10 @@ export const generateSingleCardHtml = (card) => {
                 ${card.types.map(t => `<li>${t}</li>`).join("")}
             </ul>
 
-            <p class="hw">
-                H: ${card.height}   W: ${card.weight}
-            </p>
+            <ul class="hw">
+                <li>Height: ${card.height} cm</li>
+                <li>Weight: ${card.weight} kg</li>
+            </ul>
         </footer>
 
     </article>`;
