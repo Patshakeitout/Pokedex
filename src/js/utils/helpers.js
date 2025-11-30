@@ -34,8 +34,19 @@ export const fetchData = async (url) => {
  */
 export const validateSchema = (schema, data) =>
   Object.fromEntries(
-    Object.entries(schema).map(([key, type]) => [
-      key,
-      typeof data[key] === type ? data[key] : "na"
-    ])
+    Object.entries(schema).map(([key, rule]) => {
+      const val = data[key];
+
+      if (Array.isArray(rule)) {
+        const type = rule[0];
+        return [key,
+          Array.isArray(val) && val.every(i => typeof i === type)
+            ? val
+            : "na"
+        ];
+      }
+
+      return [key, typeof val === rule ? val : "na"];
+    })
   );
+

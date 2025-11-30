@@ -12,9 +12,9 @@ const CARD_SCHEMA = {
     id: "number",
     name: "string",
     img: "string",
+    types: ["string"],
     height: "number",
-    weight: "number",
-    baseExp: "number"
+    weight: "number"
 };
 
 
@@ -69,9 +69,21 @@ const composeCardData = async () => {
     return cards;
 }
 
+/**
+ * Parses res.types from API response to retrieve the Poké type names
+ *
+ * @function parsePokeTypes
+ * @param typesArray - Types key-value pair from response
+ * @returns {array} The array of Pokè types
+ */
+const parsePokeTypes = (typesArray) => {
+    if (!Array.isArray(typesArray)) return [];
+    return typesArray.map(t => t.type.name);
+}
+
 
 /**
- * Fetches data from API and returns json response
+ * Creates validated card properties from API response
  *
  * @function createCardProps
  * @param id - The id of card or Pokèmon
@@ -84,9 +96,9 @@ const createCardProps = (id, res) => {
         'id': id,
         'name': res.name.toUpperCase(),
         'img': res.sprites.front_shiny,
+        'types': parsePokeTypes(res.types),
         'height': res.height,
-        'weight': res.weight,
-        'baseExp': res.base_experience
+        'weight': res.weight
     }
     cardProps = validateSchema(CARD_SCHEMA, cardProps) // schema validation
 

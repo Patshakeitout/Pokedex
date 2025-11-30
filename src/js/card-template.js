@@ -13,10 +13,14 @@ export const generateSingleCardHtml = (card) => {
         </figure>
 
         <footer class="stats">
+            <ul class="types-vertical">
+                ${card.types.map(t => `<li>${t}</li>`).join("")}
+            </ul>
+
             <p class="hw">
                 H: ${card.height}   W: ${card.weight}
             </p>
-        </footer>   
+        </footer>
 
     </article>`;
 }
