@@ -1,0 +1,111 @@
+/* cards.css */
+
+/* --- Card Styles--- */
+.card {
+    aspect-ratio: 4 / 5;
+    margin: 0;
+    max-height: 400px;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-grid h3 {
+    font-size: 1.4rem;
+    color: #f5f5f5;
+    font-weight: 500;
+    margin: 0;
+}
+
+.card-grid article {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    /* Material rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.05);
+    /* Material shadow */
+    padding: 24px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: linear-gradient(135deg,
+            var(--color-primary) 0%,
+            var(--color-secondary) 100%);
+}
+
+.card-grid article:hover {
+    transform: translateY(-8px);
+    /* Lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-grid hgroup {
+    margin-bottom: 10px;
+}
+
+/* Image container centered both ways */
+.poke-figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    /* take available space */
+    margin: 0;
+    /* remove default figure margin */
+    padding: 10px 0;
+}
+
+/* Control image size here */
+.poke-figure img {
+    width: 70%;
+    /* scale factor */
+    max-width: 220px;
+    /* max limit */
+    object-fit: contain;
+}
+
+/* Footer layout */
+.card-grid article footer.stats {
+    margin-top: auto;
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+}
+
+/* Type list (horizontal pill badges) */
+.types-vertical {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+}
+
+.types-vertical li {
+    /* background: will be set dynamically by jQuery */
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 16px;
+    text-transform: capitalize;
+    color: #f5f5f5;
+    border: 1px solid #ffffff33;
+    width: fit-content;
+    /* keeps ellipses snug */
+}
+
+/* Height & Weight */
+.hw {
+    display: flex;
+    flex-direction: column;
+    /* PUT hw to right bottom */
+    align-self: flex-end;
+
+    color: #e5e5e5;
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.9;
+}

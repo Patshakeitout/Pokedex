@@ -3,7 +3,7 @@
  */
 
 import { fetchData, validateSchema } from './utils/helpers.js';
-import { generateSingleCardHtml } from './card-template.js';
+import { generateSingleCardHtml } from './card.js';
 import { handleCardClick, handleModalClose } from './modal.js';
 
 const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
@@ -15,14 +15,6 @@ const CARD_SCHEMA = {
     types: ["string"],
     height: "number",
     weight: "number"
-};
-
-const TYPE_COLORS = {
-    normal: '#A8A77A', fire: '#EE8130', water: '#6390F0', electric: '#F7D02C',
-    grass: '#7AC74C', ice: '#96D9D6', fighting: '#C22E28', poison: '#A33EA1',
-    ground: '#E2BF65', flying: '#A98FF3', psychic: '#F95587', bug: '#A6B91A',
-    rock: '#B6A136', ghost: '#735797', dragon: '#6F35FC', dark: '#705746',
-    steel: '#B7B7CE', fairy: '#D685AD'
 };
 
 
@@ -47,6 +39,7 @@ const initApp = async () => {
 const renderCards = (cards) => {
     let allCardsHtml = '';
 
+    // 
     for (let card of cards) {
         allCardsHtml += generateSingleCardHtml(card);
         bindEventListeners();
@@ -126,6 +119,28 @@ const bindEventListeners = () => {
     // Event Delegation: Open Modal
     $('#cardGrid').on('click', '.card', handleCardClick);
     $('#modalCloseButton').on('click', handleModalClose);
+};
+
+
+// Function takes the main card element (jQuery object) and the types array
+const applyCardTypeBackground = ($card, types) => {
+    const type1 = types[0];
+    const type2 = types[1] || type1;
+    const color1 = TYPE_COLORS[type1] || '#777777';
+    const color2 = TYPE_COLORS[type2] || color1;
+
+    // 1. Set CSS Variables on the main card for the background gradient
+    $card.css({ '--color-primary': color1, '--color-secondary': color2 });
+
+    // 2. Style individual type pills (NO gradient here, only solid color)
+    $card.find('.types-vertical li').each(function () {
+        const $li = $(this);
+        const typeName = $li.text();
+        const typeColor = TYPE_COLORS[typeName] || '#777777';
+
+        // Set background and text color for the pill
+        $li.css({ 'background-color': typeColor});
+    });
 };
 
 
