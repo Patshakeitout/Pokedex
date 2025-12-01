@@ -1,28 +1,49 @@
 // card.js
 
-const TYPE_COLORS = {
-    normal: '#A8A77A', fire: '#EE8130', water: '#6390F0', electric: '#F7D02C',
-    grass: '#7AC74C', ice: '#96D9D6', fighting: '#C22E28', poison: '#A33EA1',
-    ground: '#E2BF65', flying: '#A98FF3', psychic: '#F95587', bug: '#A6B91A',
-    rock: '#B6A136', ghost: '#735797', dragon: '#6F35FC', dark: '#705746',
-    steel: '#B7B7CE', fairy: '#D685AD'
+const POKE_PALETTE = {
+    bug: { bg: '#A6B91A', info: '#444444' },
+    dark: { bg: '#705746', info: '#E0E0E0' },
+    dragon: { bg: '#6F35FC', info: '#E0E0E0' },
+    electric: { bg: '#F7D02C', info: '#444444' },
+    fairy: { bg: '#D685AD', info: '#444444' },
+    fighting: { bg: '#C22E28', info: '#E0E0E0' },
+    fire: { bg: '#EE8130', info: '#E0E0E0' },
+    flying: { bg: '#A98FF3', info: '#444444' },
+    ghost: { bg: '#735797', info: '#E0E0E0' },
+    grass: { bg: '#7AC74C', info: '#E0E0E0' },
+    ground: { bg: '#E2BF65', info: '#444444' },
+    ice: { bg: '#96D9D6', info: '#444444' },
+    normal: { bg: '#A8A77A', info: '#444444' },
+    poison: { bg: '#A33EA1', info: '#E0E0E0' },
+    psychic: { bg: '#F95587', info: '#E0E0E0' },
+    rock: { bg: '#B6A136', info: '#E0E0E0' },
+    steel: { bg: '#B7B7CE', info: '#444444' },
+    water: { bg: '#6390F0', info: '#E0E0E0' }
 };
 
 
 const getCardStyleString = (types) => {
     const type1 = types[0];
     const type2 = types[1] || type1;
-    const color1 = TYPE_COLORS[type1] || '#777';
-    const color2 = TYPE_COLORS[type2] || color1;
+    const bgTypeColor1 = POKE_PALETTE[type1].bg || '#777';
+    const bgTypeColor2 = POKE_PALETTE[type2].bg || color1;
+    const infoColor = POKE_PALETTE[type1].info || '#E0E0E0';
 
-    return `--color-primary: ${color1}; --color-secondary: ${color2};`;
+    return `--color-primary: ${bgTypeColor1}; 
+            --color-secondary: ${bgTypeColor2};
+            --color-info: ${infoColor};
+            `;
 };
 
 
 const getPillStyleString = (typeName) => {
-    const color = TYPE_COLORS[typeName] || '#777';
-
-    return `background-color: ${color};`;
+    const pillColor = POKE_PALETTE[typeName].bg || '#777';
+    const pillBorderColor = POKE_PALETTE[typeName].info || '#777';
+    
+    // Text color (color) will be set in card.css
+    return `background-color: ${pillColor}; 
+            border: 1px solid ${pillBorderColor};
+            `;
 };
 
 
@@ -32,7 +53,7 @@ export const generateSingleCardHtml = (card) => {
 
     // 2. Generate Pills HTML with their own inline styles
     const typePillsHtml = card.types.map(t => {
-        const pillStyle = getPillStyleString(t.toLowerCase());
+        const pillStyle = getPillStyleString(t);
         return `<li style="${pillStyle}">${t}</li>`;
     }).join("");
 
