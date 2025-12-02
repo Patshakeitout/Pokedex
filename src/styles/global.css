@@ -31,7 +31,8 @@ header {
     justify-content: space-between;
     padding: 16px 16px;
     background-color: var(--bg-dark-surface);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    ;
     /* Pokémon red */
     color: var(--color-text-main);
 }
@@ -56,8 +57,21 @@ header input[type="search"] {
 }
 
 main {
-    max-width: 85vw;
-    margin: 32px auto;
+    max-width: 95vw;
+    margin: 38px auto;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+}
+
+.nav {
+    margin-top: 38px;
+}
+
+#pagination li a {
+    color: var(--color-text-main)
 }
 
 
@@ -68,7 +82,6 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 40px;
 }
-
 
 
 /* --- Modal Style (<dialog>) --- */

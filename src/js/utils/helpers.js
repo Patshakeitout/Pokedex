@@ -12,8 +12,8 @@
  */
 export const fetchData = async (url) => {
     try {
-        const res = await fetch(url);
-        const data = await res.json(); // step for parsing byte stream to json
+        let res = await fetch(url);
+        let data = await res.json(); // step for parsing byte stream to json
         return data;
     } catch (err) {
         console.error("Fetch failed:", err);
