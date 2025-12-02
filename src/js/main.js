@@ -49,6 +49,7 @@ const initApp = async () => {
  * @returns {void}
  */
 const renderCards = (cards) => {
+    $('#cardGrid').empty();
     let allCardsHtml = '';
 
     for (let card of cards) {
@@ -158,75 +159,100 @@ const applyCardTypeBackground = ($card, types) => {
 };
 
 
+/**
+ * Handles click events on pagination links, fetches new data, 
+ * and re-renders the cards and the pagination UI.
+ * @loc 10
+ * @param {Event} event - The click event object.
+ * @returns {void}
+ */
 const handlePaginationClick = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); 
 
-    const pageNumber= +$(event.currentTarget).text();
+    // 1. Use .target due to event delegation
+    const aTag = event.target.closest('a'); 
 
+    // 2. Extract page number from the data-page attribute (most reliable)
+    const pageNumber = +aTag.getAttribute('data-page'); 
+
+    // 3. Validation Check (Stops execution for non-numeric links like "..." or icons without data)
     if (isNaN(pageNumber) || pageNumber < 1) {
-        console.error(`Invalid page number extracted from text: ${pageNumber}`);
+        console.warn(`Click on non-navigable element ignored: ${aTag.textContent}`);
         return;
     }
-    
-    // Aggregate Pokè data for the new page
+    // 4. Aggregate Pokè data for the new page
     let newCards = await composeCardData(pageNumber);
-    renderCards(newCards); // Rendering
+    renderCards(newCards); 
 
-    // Pagination nav (Rerender pagination to update active state)
-    renderPagination(PAGE_CARDS, pageNumber);
-    
+    // 5. Rerender pagination to update active state
+    renderPagination(pageNumber); 
 };
 
 
 /**
- * Creates a single jQuery list item element for pagination.
- * 
+ * Creates a single list item element (<li>) for pagination.
  * @param {string|number} label - The text or HTML content for the link.
  * @param {number} page - The target page number for the data attribute.
  * @param {boolean} [disabled=false] - Whether the button is disabled.
  * @param {boolean} [active=false] - Whether this is the currently active page.
- * @returns {jQuery} The created <li> element as a jQuery object.
+ * @returns {HTMLLIElement} The created <li> DOM element.
  */
 const createPageItem = (label, page, disabled = false, active = false) => {
-  const className = disabled ? "disabled" : active ? "active" : "waves-effect";
-  const $li = $("<li>").addClass(className);
-  const $a = $("<a>").attr("href", "#!").attr("data-page", page).html(label);
-  return $li.append($a);
+    // 1. Determine Class Name
+    const className = disabled ? "disabled" : active ? "active" : "waves-effect";
+    // 2. Create Elements
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    li.className = className; // Sets class on the <li>
+    a.setAttribute("href", "#!");
+    a.setAttribute("data-page", page);
+
+    a.innerHTML = label; // Uses innerHTML to allow for <i> tags (icons)
+
+    // 4. Assemble and Return
+    li.appendChild(a);
+    return li;
 };
 
 
 /**
  * Renders the smart windowed pagination into the element with class .pagination.
- * 
  * @param {number} currentPage - The currently active page number.
  * @returns {void}
  */
 const renderPagination = (currentPage) => {
-    const $ul = $(".pagination").empty();
-    $ul.append(createPageItem('<i class="material-icons">chevron_left</i>', currentPage - 1, currentPage === 1)); // Prev
+    // Select the first element with the class .pagination
+    const ul = document.querySelector(".pagination"); 
+    
+    // Clear existing content (safer way than innerHTML = "")
+    ul.innerHTML = ''; 
+
+    // Prev
+    ul.appendChild(createPageItem('<i class="material-icons">chevron_left</i>', currentPage - 1, currentPage === 1)); // 3
     
     // Calculate the visible window start and end points
-    let startPage = Math.max(2, currentPage - OFFSET);
-    let endPage = Math.min(TOTAL_PAGES - 1, currentPage + OFFSET);
+    let startPage = Math.max(2, currentPage - OFFSET); // 5
+    let endPage = Math.min(TOTAL_PAGES - 1, currentPage + OFFSET); // 6
 
     // Adjust clamping to ensure the window size (INNER_CIRCLE) is maintained
-    if (currentPage < INNER_CIRCLE) endPage = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE);
-    if (currentPage > TOTAL_PAGES - OFFSET) startPage = TOTAL_PAGES - INNER_CIRCLE + 1;
+    if (currentPage < INNER_CIRCLE) endPage = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE); // 8
+    if (currentPage > TOTAL_PAGES - OFFSET) startPage = TOTAL_PAGES - INNER_CIRCLE + 1; // 9
 
     // First page & Left Ellipsis
-    $ul.append(createPageItem(1, 1, false, 1 === currentPage));
-    if (startPage > 2) $ul.append(createPageItem('...', startPage - 1, true));
+    ul.appendChild(createPageItem(1, 1, false, 1 === currentPage)); // 11
+    if (startPage > 2) ul.appendChild(createPageItem('...', startPage - 1, true)); // 12
     
     // Render the centered window
-    for (let i = startPage; i <= endPage; i++) {
-        $ul.append(createPageItem(i, i, false, i === currentPage));
+    for (let i = startPage; i <= endPage; i++) { // 14
+        ul.appendChild(createPageItem(i, i, false, i === currentPage));
     }
 
     // Last page & Right Ellipsis
-    if (endPage < TOTAL_PAGES - 1) $ul.append(createPageItem('...', endPage + 1, true));
-    if (TOTAL_PAGES > 1) $ul.append(createPageItem(TOTAL_PAGES, TOTAL_PAGES, false, TOTAL_PAGES === currentPage));
+    if (endPage < TOTAL_PAGES - 1) ul.appendChild(createPageItem('...', endPage + 1, true));
+    if (TOTAL_PAGES > 1) ul.appendChild(createPageItem(TOTAL_PAGES, TOTAL_PAGES, false, TOTAL_PAGES === currentPage));
 
-    $ul.append(createPageItem('<i class="material-icons">chevron_right</i>', currentPage + 1, currentPage === TOTAL_PAGES)); // Next
+    // Next
+    ul.appendChild(createPageItem('<i class="material-icons">chevron_right</i>', currentPage + 1, currentPage === TOTAL_PAGES));
 };
 
 
