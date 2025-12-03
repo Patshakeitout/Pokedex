@@ -12,7 +12,7 @@ const PAGE_CARDS = 30;
 
 // PAGINATION
 const TOTAL_PAGES = Math.ceil(1025 / PAGE_CARDS);
-const INNER_CIRCLE = 9;
+const INNER_CIRCLE = 7;
 const OFFSET = Math.floor(INNER_CIRCLE / 2);
 
 // SCHEME
@@ -168,13 +168,13 @@ const applyCardTypeBackground = ($card, types) => {
  * @returns {void}
  */
 const handlePaginationClick = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
     // 1. Use .target due to event delegation
-    const aTag = event.target.closest('a'); 
+    const aTag = event.target.closest('a');
 
     // 2. Extract page number from the data-page attribute (most reliable)
-    const pageNumber = +aTag.getAttribute('data-page'); 
+    const pageNumber = +aTag.getAttribute('data-page');
 
     // 3. Validation Check (Stops execution for non-numeric links like "..." or icons without data)
     if (isNaN(pageNumber) || pageNumber < 1) {
@@ -183,10 +183,10 @@ const handlePaginationClick = async (event) => {
     }
     // 4. Aggregate Pokè data for the new page
     let newCards = await composeCardData(pageNumber);
-    renderCards(newCards); 
+    renderCards(newCards);
 
     // 5. Rerender pagination to update active state
-    renderPagination(pageNumber); 
+    renderPagination(pageNumber);
 };
 
 
@@ -207,76 +207,117 @@ const createPageItem = (label, page, disabled = false, active = false) => {
     a.href = "#!";
     if (!disabled && page !== null) a.dataset.page = page;
     a.innerHTML = label;
-
     li.appendChild(a);
+
     return li;
 };
 
 
 /**
+ * Computes the inner circle window for pagination.
+ * @loc 14
+ * @param {number} page - The target page number for the data attribute.
+ * @returns {json} {start: start, end: end} - JSON that contains start and end.
+ */
+const computeWindow = (page) => {
+    let start = Math.max(2, page - OFFSET);
+    let end = Math.min(TOTAL_PAGES - 1, page + OFFSET);
+
+    // Edge case: if page is at the very beginning
+    if (page <= INNER_CIRCLE + 1 - OFFSET) {
+        end = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE + 1); // grow to 10
+    }
+
+    // Edge case: start too small
+    if (start < 2) {
+        end = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE);
+        start = 2;
+    }
+
+    // Edge case: end too large
+    if (page >= TOTAL_PAGES - INNER_CIRCLE + OFFSET) {
+        start = Math.max(2, TOTAL_PAGES - INNER_CIRCLE);   // grow backward
+        end = TOTAL_PAGES - 1;
+    }
+
+    return { start: start, end: end };
+};
+
+
+/**
+ * Renders left edge for pagination.
+ * @loc 3
+ * @param {CallableFunction} add - Callable that inherits createPageItem(label, value, disable, active)
+ * @returns {json} {start: start, end: end} - JSON that contains start and end.
+ */
+const renderLeftEdge = (add, page, start) => {
+    // args: label, value, disable, active; active defaults to false
+    add('<i class="material-icons">chevron_left</i>', Math.max(1, page - 1), page === 1);
+    
+    add(1, 1, false, page === 1); // 1
+    if (start > 2) add("…", null, true); // ...
+};
+
+
+/**
+ * Renders carousel for pagination.
+ * @loc 1
+ * @param {CallableFunction} add - Callable that inherits createPageItem(label, value, disable, active)
+ * @returns {json} {start: start, end: end} - JSON that contains start and end.
+ */
+const renderWindow = (add, page, start, end) => {
+    // args: label, value, disable, active
+    for (let i = start; i <= end; i++) add(i, i, false, i === page);
+};
+
+
+/**
+ * Renders carousel for pagination.
+ * @loc 3
+ * @param {CallableFunction} add - Callable that inherits createPageItem(label, value, disable, active)
+ * @returns {json} {start: start, end: end} - JSON that contains start and end.
+ */
+const renderRightEdge = (add, page, start, end) => {
+    // args: label, value, disable, active; end defaults to false
+    if (end < TOTAL_PAGES - 1) add("…", null, true); // ...
+
+    add(TOTAL_PAGES, TOTAL_PAGES, false, page === TOTAL_PAGES); // 35
+    add('<i class="material-icons">chevron_right</i>', Math.min(TOTAL_PAGES, page + 1), page === TOTAL_PAGES); 
+};
+
+
+/**
  * Renders the sliding carousel paginator into the element with class .pagination.
- * @param {number} currentPage - The currently active page number.
+ *
+ * Visualization for 7 pages in carousel :
+ *
+ * ```
+ * LEFT EDGE:
+ * ‹ 1  [2 3 4 5 6 7 8]  …  35 ›
+ *
+ * CENTER:
+ * ‹ 1  …  [9 10 11 12 13 14 15]  …  35 ›
+ *
+ * RIGHT EDGE:
+ * ‹ 1  …  [29 30 31 32 33 34]  35 ›
+ * ```
+ * 
+ * @param {number} page - The currently active page number.
  * @returns {void}
  */
-const renderPagination = (currentPage) => {
+const renderPagination = (page) => {
     const ul = document.querySelector(".pagination");
-    ul.innerHTML = '';
+    ul.innerHTML = ''; // Clear ul content
 
-    // PREV ARROW
-    ul.appendChild(createPageItem(
-        '<i class="material-icons">chevron_left</i>',
-        Math.max(1, currentPage - 1),
-        currentPage === 1
-    ));
+    const add = (label, value, disabled, active) => 
+        ul.appendChild(createPageItem(label, value, disabled, active));
 
-    // Compute full window
-    let start = currentPage - OFFSET;
-    let end   = currentPage + OFFSET;
+    // Computes inner circle window
+    const { start, end } = computeWindow(page);
 
-    // Clamp to edges
-    if (start < 2) {
-        start = 2;
-        end = Math.min(TOTAL_PAGES - 1, start + INNER_CIRCLE - 1);
-    }
-    if (end > TOTAL_PAGES - 1) {
-        end = TOTAL_PAGES - 1;
-        start = Math.max(2, end - INNER_CIRCLE + 1);
-    }
-
-    // FIRST PAGE
-    ul.appendChild(createPageItem(1, 1, false, currentPage === 1));
-
-    // LEFT ELLIPSIS
-    if (start > 2) {
-        ul.appendChild(createPageItem("…", null, true));
-    }
-
-    // INNER CIRCLE
-    for (let i = start; i <= end; i++) {
-        ul.appendChild(createPageItem(i, i, false, i === currentPage));
-    }
-
-    // RIGHT ELLIPSIS
-    if (end < TOTAL_PAGES - 1) {
-        ul.appendChild(createPageItem("…", null, true));
-    }
-
-    // LAST PAGE
-    if (TOTAL_PAGES > 1) {
-        ul.appendChild(createPageItem(
-            TOTAL_PAGES,
-            TOTAL_PAGES,
-            false,
-            currentPage === TOTAL_PAGES
-        ));
-    }
-
-    // NEXT ARROW
-    ul.appendChild(createPageItem(
-        '<i class="material-icons">chevron_right</i>',
-        Math.min(TOTAL_PAGES, currentPage + 1),
-        currentPage === TOTAL_PAGES
-    ));
+    renderLeftEdge(add, page, start, end);
+    renderWindow(add, page, start, end);
+    renderRightEdge(add, page, start, end);
 };
 
 
