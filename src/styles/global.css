@@ -1,4 +1,5 @@
 @import url("./card.css");
+@import url("./paginator.css");
 
 :root {
     --bg-dark-base: #222222;
@@ -29,10 +30,9 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 16px;
+    padding: 16px 32px;
     background-color: var(--bg-dark-surface);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    ;
     /* Pokémon red */
     color: var(--color-text-main);
 }
@@ -50,10 +50,16 @@ header h1 {
 }
 
 header input[type="search"] {
-    max-width: 150px;
-    height: 32px;
-    padding-left: 0.5rem;
-    border-radius: 32px;
+    font-size: 18px;
+    height: 38px;
+    margin-right: 16px;
+    padding-left: 12px;
+    border-radius: 16px;
+}
+
+header .btn {
+    border-radius: 16px;
+    width: 60px;
 }
 
 main {
@@ -69,27 +75,6 @@ section {
 .nav {
     margin-top: 38px;
 }
-
-.pagination li.disabled a {
-    cursor: default; /* Changes cursor to a default arrow */
-    color: #666666; /* Your specified disabled color */
-    pointer-events: none; /* Ensures the link is truly unclickable */
-}
-
-/* Targets all links (a) inside list items (li) within .pagination */
-.pagination li a {
-    color: var(--color-text-main); /* Your main text color: #E0E0E0 */
-    transition: font-size 0.2s ease-in-out; /* Smooth transition for hover effect */
-    text-decoration: none; /* Removes the default link underline */
-}
-
-/* Targets enabled links when hovered over or focused */
-.pagination li a:hover,
-.pagination li a:focus {
-    color: var(--color-text-main); /* Keeps the color the same or change it if you wish! */
-    font-size: 110%; /* Increases the font size by 10% */
-}
-
 
 /* --- Card Grid --- */
 .card-grid {
