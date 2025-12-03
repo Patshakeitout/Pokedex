@@ -8,6 +8,7 @@ import { handleCardClick, handleModalClose } from './modal.js';
 
 const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
 const URL_LIMIT1 = "https://pokeapi.co/api/v2/pokemon?limit=1";
+let cards = [];
 const PAGE_CARDS = 30;
 
 // PAGINATION
@@ -263,7 +264,7 @@ $(document).ready(async () => {
     initApp();
 
     // Aggregate Pokè data
-    let cards = await composeCardData(1);
+    cards = await composeCardData(1);
 
     // Rendering
     renderCards(cards);
@@ -277,4 +278,6 @@ $(document).ready(async () => {
     // 2. Bind the click event using delegation on the <a> children
     $(".pagination").on('click', 'li.waves-effect a', handlePaginationClick);
 
+    // 3. Event binding for Search button
+    //--todo
 });
