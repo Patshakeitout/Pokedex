@@ -71,7 +71,8 @@ const renderCards = (cards) => {
 const composeCardData = async (pageNumber) => {
     let cards = [];
     let firstId = PAGE_CARDS * (pageNumber - 1) + 1;
-    let lastId = PAGE_CARDS * pageNumber;
+    let lastId = (pageNumber === TOTAL_PAGES) ? 1025 : PAGE_CARDS * pageNumber;
+
     for (let id = firstId; id <= lastId; id++) {
         let currentUrl = `${URL_BASE}` + id;
         const res = await fetchData(currentUrl); // Fetches 1st level json
@@ -190,12 +191,13 @@ const handlePaginationClick = async (event) => {
 
 
 /**
- * Creates a single list item element (<li>) for pagination.
+ * Creates a single list item element for pagination (li).
+ * @loc 9
  * @param {string|number} label - The text or HTML content for the link.
  * @param {number} page - The target page number for the data attribute.
  * @param {boolean} [disabled=false] - Whether the button is disabled.
  * @param {boolean} [active=false] - Whether this is the currently active page.
- * @returns {HTMLLIElement} The created <li> DOM element.
+ * @returns {HTMLLIElement} The created li-element.
  */
 const createPageItem = (label, page, disabled = false, active = false) => {
     // 1. Determine Class Name
