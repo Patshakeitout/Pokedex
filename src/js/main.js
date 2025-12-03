@@ -7,7 +7,6 @@ import { generateSingleCardHtml } from './card.js';
 import { handleCardClick, handleModalClose } from './modal.js';
 
 const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
-const URL_LIMIT1 = "https://pokeapi.co/api/v2/pokemon?limit=1";
 let cards = [];
 const PAGE_CARDS = 30;
 
@@ -201,62 +200,85 @@ const handlePaginationClick = async (event) => {
  * @returns {HTMLLIElement} The created li-element.
  */
 const createPageItem = (label, page, disabled = false, active = false) => {
-    // 1. Determine Class Name
-    const className = disabled ? "disabled" : active ? "active" : "waves-effect";
-    // 2. Create Elements
     const li = document.createElement("li");
+    li.className = disabled ? "disabled" : active ? "active" : "waves-effect";
+
     const a = document.createElement("a");
-    li.className = className; // Sets class on the <li>
-    a.setAttribute("href", "#!");
-    a.setAttribute("data-page", page);
+    a.href = "#!";
+    if (!disabled && page !== null) a.dataset.page = page;
+    a.innerHTML = label;
 
-    a.innerHTML = label; // Uses innerHTML to allow for <i> tags (icons)
-
-    // 4. Assemble and Return
     li.appendChild(a);
     return li;
 };
 
 
 /**
- * Renders the smart windowed pagination into the element with class .pagination.
+ * Renders the sliding carousel paginator into the element with class .pagination.
  * @param {number} currentPage - The currently active page number.
  * @returns {void}
  */
 const renderPagination = (currentPage) => {
-    // Select the first element with the class .pagination
-    const ul = document.querySelector(".pagination"); 
-    
-    // Clear existing content (safer way than innerHTML = "")
-    ul.innerHTML = ''; 
+    const ul = document.querySelector(".pagination");
+    ul.innerHTML = '';
 
-    // Prev
-    ul.appendChild(createPageItem('<i class="material-icons">chevron_left</i>', currentPage - 1, currentPage === 1)); // 3
-    
-    // Calculate the visible window start and end points
-    let startPage = Math.max(2, currentPage - OFFSET); // 5
-    let endPage = Math.min(TOTAL_PAGES - 1, currentPage + OFFSET); // 6
+    // PREV ARROW
+    ul.appendChild(createPageItem(
+        '<i class="material-icons">chevron_left</i>',
+        Math.max(1, currentPage - 1),
+        currentPage === 1
+    ));
 
-    // Adjust clamping to ensure the window size (INNER_CIRCLE) is maintained
-    if (currentPage < INNER_CIRCLE) endPage = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE); // 8
-    if (currentPage > TOTAL_PAGES - OFFSET) startPage = TOTAL_PAGES - INNER_CIRCLE + 1; // 9
+    // Compute full window
+    let start = currentPage - OFFSET;
+    let end   = currentPage + OFFSET;
 
-    // First page & Left Ellipsis
-    ul.appendChild(createPageItem(1, 1, false, 1 === currentPage)); // 11
-    if (startPage > 2) ul.appendChild(createPageItem('...', startPage - 1, true)); // 12
-    
-    // Render the centered window
-    for (let i = startPage; i <= endPage; i++) { // 14
+    // Clamp to edges
+    if (start < 2) {
+        start = 2;
+        end = Math.min(TOTAL_PAGES - 1, start + INNER_CIRCLE - 1);
+    }
+    if (end > TOTAL_PAGES - 1) {
+        end = TOTAL_PAGES - 1;
+        start = Math.max(2, end - INNER_CIRCLE + 1);
+    }
+
+    // FIRST PAGE
+    ul.appendChild(createPageItem(1, 1, false, currentPage === 1));
+
+    // LEFT ELLIPSIS
+    if (start > 2) {
+        ul.appendChild(createPageItem("…", null, true));
+    }
+
+    // INNER CIRCLE
+    for (let i = start; i <= end; i++) {
         ul.appendChild(createPageItem(i, i, false, i === currentPage));
     }
 
-    // Last page & Right Ellipsis
-    if (endPage < TOTAL_PAGES - 1) ul.appendChild(createPageItem('...', endPage + 1, true));
-    if (TOTAL_PAGES > 1) ul.appendChild(createPageItem(TOTAL_PAGES, TOTAL_PAGES, false, TOTAL_PAGES === currentPage));
+    // RIGHT ELLIPSIS
+    if (end < TOTAL_PAGES - 1) {
+        ul.appendChild(createPageItem("…", null, true));
+    }
 
-    // Next
-    ul.appendChild(createPageItem('<i class="material-icons">chevron_right</i>', currentPage + 1, currentPage === TOTAL_PAGES));
+    // LAST PAGE
+    if (TOTAL_PAGES > 1) {
+        ul.appendChild(createPageItem(
+            TOTAL_PAGES,
+            TOTAL_PAGES,
+            false,
+            currentPage === TOTAL_PAGES
+        ));
+    }
+
+    // NEXT ARROW
+    ul.appendChild(createPageItem(
+        '<i class="material-icons">chevron_right</i>',
+        Math.min(TOTAL_PAGES, currentPage + 1),
+        currentPage === TOTAL_PAGES
+    ));
 };
+
 
 
 // Entire app logic
