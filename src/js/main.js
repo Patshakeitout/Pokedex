@@ -39,14 +39,17 @@ const initApp = async () => {
     renderCards(cards);
     renderPagination(1);
 
-    $('.modal').modal();
-    
+    $('.modal').modal({
+        opacity: 0.5   // ← sets overlay opacity
+    });
+
+
     return cards;
 };
 
 
 /**
- * Renders cards and bind event listeners
+ * Renders cards and bind event listeners with arg: cards
  *
  * @function renderCards
  * @param {array} cards - Json Array of cards 
@@ -62,7 +65,7 @@ const renderCards = (cards) => {
 
     // DOM injection
     $('#cardGrid').append(allCardsHtml);
-    bindModalListeners();
+    bindModalListeners(cards);
 }
 
 
@@ -88,7 +91,7 @@ const composeCardData = async (pageNumber) => {
         cards.push(createCardProps(id, res));
     }
 
-    
+
     return cards;
 }
 
@@ -118,12 +121,17 @@ const parsePokeTypes = (typesArray) => {
 const createCardProps = (id, res) => {
     // A json counts as one line ;-)
     let cardProps = {
-        'id': id,
-        'name': res.name.toUpperCase(),
-        'img': res.sprites.front_shiny,
-        'types': parsePokeTypes(res.types),
-        'height': res.height * 10,
-        'weight': res.weight / 10
+        id: id,
+        name: res.name.toUpperCase(),
+        img: res.sprites.front_shiny,
+        types: parsePokeTypes(res.types),
+        height: res.height * 10,
+        weight: res.weight / 10,
+
+        base_experience: res.abilities,
+        abilities: res.abilities,
+        moves: res.moves,
+        stats: res.stats
     }
     cardProps = validateSchema(CARD_SCHEMA, cardProps) // schema validation
 
@@ -139,9 +147,14 @@ const createCardProps = (id, res) => {
  * @function bindModalListeners
  * @returns {void}
  */
-const bindModalListeners = () => {
-    $('#cardGrid').on('click', '.card', handleCardClick);
-    $('#modalCloseButton').on('click', handleModalClose);
+const bindModalListeners = (cards) => {
+    document.querySelector('#cardGrid').addEventListener('click', e => {
+        const card = e.target.closest('.card');
+        if (!card) return;
+
+        handleCardClick(e, cards);
+    });
+    //$('.btn-prev').on('click', () => console.log("ok works"));
 };
 
 
@@ -222,13 +235,13 @@ const renderPagination = (page) => {
 function filterPokeCards(pokeData) {
     const text = document.getElementById("input-search").value.trim().toLowerCase();
     if (text.length < 3) {
-        M.toast({html: 'Please type at least 3 characters!'});
+        M.toast({ html: 'Please type at least 3 characters!' });
         return;
     }
 
     const subset = pokeData.filter(card => card.name.toLowerCase().includes(text));
-    const subsetLength = subset.length; 
-    if (subsetLength == 0) M.toast({html: 'No Pokèmons with that name found'});
+    const subsetLength = subset.length;
+    if (subsetLength == 0) M.toast({ html: 'No Pokèmons with that name found' });
 
     renderCards(subset);
 }
@@ -238,8 +251,9 @@ function filterPokeCards(pokeData) {
 $(document).ready(async () => {
     cards = await initApp();
 
-    document.getElementById('search').addEventListener("click", () => filterPokeCards(cards));
-
     $(".pagination").off('click', 'li.waves-effect a');
     $(".pagination").on('click', 'li.waves-effect a', handlePaginationClick);
+
+    document.getElementById('search').addEventListener("click", () => filterPokeCards(cards));
+
 });

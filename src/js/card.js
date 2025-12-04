@@ -39,7 +39,7 @@ const getCardStyleString = (types) => {
 const getPillStyleString = (typeName) => {
     const pillColor = POKE_PALETTE[typeName].bg || '#777';
     const pillBorderColor = POKE_PALETTE[typeName].info || '#777';
-    
+
     // Text color (color) will be set in card.css
     return `background-color: ${pillColor}; 
             border: 1px solid ${pillBorderColor};
@@ -58,8 +58,10 @@ export const generateSingleCardHtml = (card) => {
     }).join("");
 
     // 3. Return the HTML string with styles embedded
+
+    //data-t="${card.name} ${card.id}" data-sub="Category ${card.id}"
     return `
-    <article class="card" data-id="${card.id}" data-t="${card.name} ${card.id}" data-sub="Category ${card.id}" style="${cardStyle}">
+    <article class="card" data-id="${card.id}" style="${cardStyle}">
         
         <hgroup class="card-title">
             <h3 class="name">${card.name}</h3>

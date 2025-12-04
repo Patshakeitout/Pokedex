@@ -9,18 +9,24 @@
  * * It extracts data attributes from the clicked card, populates the modal content,
  * * and then opens the Materialize modal.
  *
- * @param {Event} e - The jQuery click event object.
+ * @param {Event} event - The card click event object.
  * @returns {void}
  */
-export const handleCardClick = (e) => {
-    const modalData = $(e.currentTarget).data();
+export const handleCardClick = (event, cards) => {
+    const card = event.target.closest('.card');
+    const id = parseInt(card.dataset.id);
+    const selectedCard = cards.find(card => card.id === id);
+    
+    // Fill modal content
+    document.querySelector('#modalTitle').textContent = selectedCard.weight;
+    document.querySelector('#modalSubtitle').textContent = `ID: ${id}`;
+    // document.querySelector('#modalBody').textContent =
+    //     body || 'No further text available.';
 
-    $('#modalTitle').text(modalData.t);
-    $('#modalSubtitle').text(`ID: ${modalData.id} | ${modalData.sub}`);
-    $('#modalBody').text(modalData.body || 'No further text available.');
-
-    // Opens the modal using the Materialize/jQuery API
-    $('#cardModal').modal('open');
+    // Open Materialize modal
+    const modalElem = document.querySelector('#cardModal');
+    const modal = M.Modal.getInstance(modalElem) || M.Modal.init(modalElem);
+    modal.open();
 };
 
 
@@ -33,3 +39,27 @@ export const handleCardClick = (e) => {
 export const handleModalClose = () => {
     $('#cardModal').modal('close');
 };
+
+
+/**
+ * Renders subset of Poke card data given by search string
+ * 
+ * @loc 8
+ * @param {array} pokeData 
+ */
+function filterModalData(id, pokeData) {
+
+    /*
+    const text = document.getElementById("input-search").value.trim().toLowerCase();
+    if (text.length < 3) {
+        M.toast({ html: 'Please type at least 3 characters!' });
+        return;
+    }
+
+    const subset = pokeData.filter(card => card.name.toLowerCase().includes(text));
+    const subsetLength = subset.length;
+    if (subsetLength == 0) M.toast({ html: 'No Pokèmons with that name found' });
+
+    renderCards(subset);
+    */
+}

@@ -31,7 +31,7 @@
         <h1>P o k é d e x</h1>
 
         <input id="input-search" type="search" placeholder="Search Pokémon" minlength="3"
-               class="browser-default btn-search">
+            class="browser-default btn-search">
         <button id="search" class="btn red waves-effect waves-light" type="submit" name="action">
             <i class="material-icons">search</i>
         </button>
@@ -42,29 +42,48 @@
         <section class="nav">
             <ul class="pagination"></ul>
         </section>
-        
-        <section class="card-grid" id="cardGrid">
-        </section>
+
+        <section class="card-grid" id="cardGrid"></section>
 
         <section class="nav">
             <ul class="pagination"></ul>
         </section>
     </main>
 
-    <div id="cardModal" class="modal">
-        <div class="modal-content">
+    <dialog id="cardModal" class="modal fixed-footer">
+        <main class="modal-content">
             <article>
                 <hgroup>
                     <h2 id="modalTitle"></h2>
                     <p class="modal-subtitle" id="modalSubtitle"></p>
                 </hgroup>
-                <p id="modalBody"></p>
+                <p id="modalBody">
+
+                <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                    </li>
+                </ul>
+                </p>
             </article>
-        </div>
-        <div class="modal-footer">
+        </main>
+        <footer class="modal-footer">
+            <a href="#!" class="btn-prev waves-effect waves-green btn-flat">Previous</a>
+            <a href="#!" class="btn-next waves-effect waves-green btn-flat">Next</a>
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-        </div>
-    </div>
+        </footer>
+    </dialog>
 </body>
 
 </html>
+
+#cardModal > footer > a.modal-close.waves-effect.waves-green.btn-flat

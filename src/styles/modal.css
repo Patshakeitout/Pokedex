@@ -1,0 +1,47 @@
+/* --- Modal Style (<dialog>) --- */
+.modal {
+    background: unset;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 100vmax rgba(0, 0, 0, .5);
+    /* Backdrop effect */
+    max-width: 600px;
+    padding: 0;
+    opacity: 0.8!important;
+}
+
+.modal-content {
+    padding: 30px;
+}
+
+.modal h2 {
+    color: #3f51b5;
+    margin-top: 0;
+}
+
+.modal-subtitle {
+    color: #616161;
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+.modal footer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+
+#modalCloseButton {
+    background-color: #3f51b5;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+/* Dialog polyfill/fallback for browsers that don't fully support <dialog> */
+.modal:not([open]) {
+    display: none;
+}
