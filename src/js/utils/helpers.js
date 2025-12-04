@@ -3,6 +3,22 @@
  * Contains small, stateless helpers used across the Pokedex app.
  */
 
+export const renderSpinner = () => {
+  let cardGrid = document.getElementById('cardGrid');
+  cardGrid.innerHTML = ''; 
+  cardGrid.innerHTML = `<div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>`;
+}
+
 
 /**
  * Fetches Data from API endpoint.
@@ -11,14 +27,14 @@
  * @returns {string} The parsed json.
  */
 export const fetchData = async (url) => {
-    try {
-        let res = await fetch(url);
-        let data = await res.json(); // step for parsing byte stream to json
-        return data;
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        return null;
-    }
+  try {
+    let res = await fetch(url);
+    let data = await res.json(); // step for parsing byte stream to json
+    return data;
+  } catch (err) {
+    console.error("Fetch failed:", err);
+    return null;
+  }
 };
 
 

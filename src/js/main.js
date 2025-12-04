@@ -2,7 +2,7 @@
  * @fileoverview main.js for application
  */
 
-import { fetchData, validateSchema } from './utils/helpers.js';
+import { renderSpinner, fetchData, validateSchema } from './utils/helpers.js';
 import { generateSingleCardHtml } from './card.js';
 import { handleCardClick, handleModalClose } from './modal.js';
 import {
@@ -68,11 +68,14 @@ const renderCards = (cards) => {
 
 /**
  * Fetches data from API and returns json response
- *
- * @param {number} - The offset of rendered page (pagination).
+ * 
+ * @loc
+ * @param {pageNumber} - The page number from pagination or page 1 to be rendered.
  * @returns {array} - The cards array.
  */
 const composeCardData = async (pageNumber) => {
+    renderSpinner();
+
     let cards = [];
     let firstId = PAGE_CARDS * (pageNumber - 1) + 1;
     let lastId = (pageNumber === TOTAL_PAGES) ? 1025 : PAGE_CARDS * pageNumber;
@@ -85,6 +88,7 @@ const composeCardData = async (pageNumber) => {
         cards.push(createCardProps(id, res));
     }
 
+    
     return cards;
 }
 
@@ -144,7 +148,7 @@ const bindModalListeners = () => {
 /**
  * Handles click events on pagination links, fetches new data, 
  * and re-renders the cards and the pagination UI.
- * @loc 10
+ * @loc 11
  * @param {Event} event - The click event object.
  * @returns {void}
  */
@@ -164,6 +168,8 @@ const handlePaginationClick = async (event) => {
     }
     // 4. Aggregate Pokè data for the new page
     let newCards = await composeCardData(pageNumber);
+    document.getElementById('search').addEventListener("click", () => filterPokeCards(newCards));
+
     renderCards(newCards);
 
     // 5. Rerender pagination to update active state
@@ -191,6 +197,7 @@ const handlePaginationClick = async (event) => {
  * @returns {void}
  */
 const renderPagination = (page) => {
+    // foreach class
     const ul = document.querySelector(".pagination");
     ul.innerHTML = ''; // Clear ul content
 
@@ -205,14 +212,23 @@ const renderPagination = (page) => {
     renderRightEdge(add, page, start, end);
 };
 
+
 /**
- * Subsets Poke card data for search string 
+ * Renders subset of Poke card data given by search string
  * 
+ * @loc 8
  * @param {array} pokeData 
  */
 function filterPokeCards(pokeData) {
     const text = document.getElementById("input-search").value.trim().toLowerCase();
+    if (text.length < 3) {
+        M.toast({html: 'Please type at least 3 characters!'});
+        return;
+    }
+
     const subset = pokeData.filter(card => card.name.toLowerCase().includes(text));
+    const subsetLength = subset.length; 
+    if (subsetLength == 0) M.toast({html: 'No Pokèmons with that name found'});
 
     renderCards(subset);
 }
