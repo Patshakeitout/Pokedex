@@ -1,7 +1,7 @@
 // paginator.js
 
 // PAGINATION
-export const PAGE_CARDS = 30;
+export const PAGE_CARDS = 20;
 export const TOTAL_PAGES = Math.ceil(1025 / PAGE_CARDS);
 const INNER_CIRCLE = 7;
 const OFFSET = Math.floor(INNER_CIRCLE / 2);

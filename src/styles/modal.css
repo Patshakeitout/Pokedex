@@ -1,13 +1,12 @@
 /* --- Modal Style (<dialog>) --- */
+
 .modal {
-    background: unset;
-    border: none;
-    border-radius: 8px;
+    background: none;
+    border-image: linear-gradient(hsl(55.25deg 84.16% 30.01% / 61%), hsl(50deg 65.08% 59.41% / 60%)) fill 1;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 100vmax rgba(0, 0, 0, .5);
-    /* Backdrop effect */
-    max-width: 600px;
+    max-width: 400px;
+    aspect-ratio: 4/5;
     padding: 0;
-    opacity: 0.8!important;
 }
 
 .modal-content {
@@ -15,7 +14,7 @@
 }
 
 .modal h2 {
-    color: #3f51b5;
+    color: #dedfe7;
     margin-top: 0;
 }
 
@@ -28,6 +27,7 @@
 .modal footer {
     margin-top: 20px;
     text-align: right;
+    background: unset!important;
 }
 
 

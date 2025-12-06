@@ -4,7 +4,7 @@
 
 import { renderSpinner, fetchData, validateSchema } from './utils/helpers.js';
 import { generateSingleCardHtml } from './card.js';
-import { handleCardClick, handleModalClose } from './modal.js';
+import { handleCardClick, changeModal } from './modal.js';
 import {
     createPageItem, computeWindow, renderLeftEdge, renderWindow,
     renderRightEdge, PAGE_CARDS, TOTAL_PAGES
@@ -65,7 +65,7 @@ const renderCards = (cards) => {
 
     // DOM injection
     $('#cardGrid').append(allCardsHtml);
-    bindModalListeners(cards);
+    bindListeners(cards);
 }
 
 
@@ -140,21 +140,35 @@ const createCardProps = (id, res) => {
 
 
 /**
- * Binds all necessary event handlers to Modals.
- * * it uses Event Delegation on the '#cardGrid' element because the cards 
- * are dynamically rendered.
+ * Binds all necessary event handlers with availability of cards data.
+ * * it uses Event Delegation on the '#cardGrid' element because the 
+ * card content is dynamically rendered.
+ * * it uses Event Delegation on the '#cardModal' element because the 
+ * modal content is dynamically rendered.
  *
- * @function bindModalListeners
+ * @function bindListeners
+ * @loc 
+ * @param {cards} - The Poké cards json-array.
  * @returns {void}
  */
-const bindModalListeners = (cards) => {
+const bindListeners = (cards) => {
     document.querySelector('#cardGrid').addEventListener('click', e => {
         const card = e.target.closest('.card');
         if (!card) return;
-
         handleCardClick(e, cards);
     });
-    //$('.btn-prev').on('click', () => console.log("ok works"));
+
+    document.querySelector('.modal').addEventListener('click', (e) => {
+        const cardId = Number(document.querySelector('.modal').querySelector('#card-id').textContent);
+        const prevBtn = e.target.closest('#prev');
+        const nextBtn = e.target.closest('#next');
+
+        if (prevBtn || nextBtn ) {
+            const newId = cardId + (prevBtn ? -1 : +1);
+            const newCard = cards.find(c => c.id === newId);
+            changeModal(newCard);
+        }
+    });
 };
 
 

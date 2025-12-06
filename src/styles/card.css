@@ -8,7 +8,7 @@
 .card {
     aspect-ratio: 4 / 5;
     margin: 0;
-    max-height: 400px;
+    max-height: 450px;
 }
 
 .card-title {
@@ -27,7 +27,7 @@
 .card-grid article {
     display: flex;
     flex-direction: column;
-    border-radius: 8px;
+    border-radius: 10px;
     /* Material rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.05);
     /* Material shadow */
@@ -63,9 +63,9 @@
 
 /* Control image size here */
 .poke-figure img {
-    width: 75%;
+    width: 62%;
     /* scale factor */
-    max-width: 220px;
+    max-width: 210px;
     /* max limit */
     object-fit: contain;
     transition: transform 0s ease-in-out;

@@ -13,15 +13,26 @@
  * @returns {void}
  */
 export const handleCardClick = (event, cards) => {
-    const card = event.target.closest('.card');
-    const id = parseInt(card.dataset.id);
-    const selectedCard = cards.find(card => card.id === id);
-    
-    // Fill modal content
-    document.querySelector('#modalTitle').textContent = selectedCard.weight;
-    document.querySelector('#modalSubtitle').textContent = `ID: ${id}`;
-    // document.querySelector('#modalBody').textContent =
-    //     body || 'No further text available.';
+    const cardTag = event.target.closest('.card');
+    const id = parseInt(cardTag.dataset.id);
+    const card = cards.find(item => item.id === id);
+    const modalContent = document.querySelector('.modal');
+
+    modalContent.innerHTML = `
+        <article class="modal-content">
+            <hgroup>
+                <h2>${card.name}</h2>
+                <h2 id="card-id" >${card.id}</h2>
+            </hgroup>
+            <p id="modalBody">
+            <figure>
+                <img id="img-poke" src="${card.img}" alt="${card.name}">
+            </figure>
+            <footer class="modal-footer">
+                <a href="#!" id="prev" class="waves-effect waves-green btn-flat">Previous</a>
+                <a href="#!" id="next" class="waves-effect waves-green btn-flat">Next</a>
+            </footer>
+        </article>`;
 
     // Open Materialize modal
     const modalElem = document.querySelector('#cardModal');
@@ -30,36 +41,24 @@ export const handleCardClick = (event, cards) => {
 };
 
 
-/**
- * Closes the Materialize modal window.
- *
- * @function handleModalClose
- * @returns {void}
- */
-export const handleModalClose = () => {
-    $('#cardModal').modal('close');
+export const changeModal = (card) => {
+    console.log(card);
+
+    const modalContent = document.querySelector('.modal');
+    modalContent.innerHTML = '';
+    modalContent.innerHTML = `
+        <article class="modal-content">
+            <hgroup>
+                <h2>${card.name}</h2>
+                <h2 id="card-id" >${card.id}</h2>
+            </hgroup>
+            <p id="modalBody">
+            <figure>
+                <img id="img-poke" src="${card.img}" alt="${card.name}">
+            </figure>
+            <footer class="modal-footer">
+                <a href="#!" id="prev" class="waves-effect waves-green btn-flat">Previous</a>
+                <a href="#!" id="next" class="waves-effect waves-green btn-flat">Next</a>
+            </footer>
+        </article>`;
 };
-
-
-/**
- * Renders subset of Poke card data given by search string
- * 
- * @loc 8
- * @param {array} pokeData 
- */
-function filterModalData(id, pokeData) {
-
-    /*
-    const text = document.getElementById("input-search").value.trim().toLowerCase();
-    if (text.length < 3) {
-        M.toast({ html: 'Please type at least 3 characters!' });
-        return;
-    }
-
-    const subset = pokeData.filter(card => card.name.toLowerCase().includes(text));
-    const subsetLength = subset.length;
-    if (subsetLength == 0) M.toast({ html: 'No Pokèmons with that name found' });
-
-    renderCards(subset);
-    */
-}

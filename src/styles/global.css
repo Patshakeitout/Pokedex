@@ -11,6 +11,9 @@
 body {
     margin: 0;
     background-color: var(--bg-dark-base);
+    background-image: url("../assets/media/bg-wood.png");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 @font-face {
@@ -82,8 +85,8 @@ section {
 .card-grid {
     display: grid;
     /* Responsive Grid: Adjusts columns based on screen width */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(253px, 8fr));
+    gap: 45px;
 }
 
 
