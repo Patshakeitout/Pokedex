@@ -2,23 +2,23 @@
 
 const POKE_PALETTE = {
     bug: { bg: '#A6B91A', info: '#444444' },
-    dark: { bg: '#705746', info: '#E0E0E0' },
-    dragon: { bg: '#6F35FC', info: '#E0E0E0' },
+    dark: { bg: '#705746', info: '#444444' },
+    dragon: { bg: '#6F35FC', info: '#444444' },
     electric: { bg: '#F7D02C', info: '#444444' },
     fairy: { bg: '#D685AD', info: '#444444' },
-    fighting: { bg: '#C22E28', info: '#E0E0E0' },
-    fire: { bg: '#EE8130', info: '#E0E0E0' },
+    fighting: { bg: '#C22E28', info: '#444444' },
+    fire: { bg: '#EE8130', info: '#444444' },
     flying: { bg: '#A98FF3', info: '#444444' },
-    ghost: { bg: '#735797', info: '#E0E0E0' },
-    grass: { bg: '#7AC74C', info: '#E0E0E0' },
+    ghost: { bg: '#735797', info: '#444444' },
+    grass: { bg: '#7AC74C', info: '#444444' },
     ground: { bg: '#E2BF65', info: '#444444' },
     ice: { bg: '#96D9D6', info: '#444444' },
     normal: { bg: '#A8A77A', info: '#444444' },
-    poison: { bg: '#A33EA1', info: '#E0E0E0' },
-    psychic: { bg: '#F95587', info: '#E0E0E0' },
-    rock: { bg: '#B6A136', info: '#E0E0E0' },
+    poison: { bg: '#A33EA1', info: '#444444' },
+    psychic: { bg: '#F95587', info: '#444444' },
+    rock: { bg: '#B6A136', info: '#444444' },
     steel: { bg: '#B7B7CE', info: '#444444' },
-    water: { bg: '#6390F0', info: '#E0E0E0' }
+    water: { bg: '#6390F0', info: '#444444' }
 };
 
 

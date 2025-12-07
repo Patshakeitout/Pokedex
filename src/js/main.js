@@ -13,20 +13,19 @@ import {
 const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
 let cards = [];
 
-// SCHEME
+// SCHEMA
 const CARD_SCHEMA = {
     id: "number",
     name: "string",
     img: "string",
     types: ["string"],
     height: "number",
-    weight: "number"
+    weight: "number",
+    base_experience: ["object"],
+    abilities: ["object"],
+    moves: ["object"],
+    stats: ["object"]    
 };
-/*
-const MODEL_SCHEMA = {
-
-}
-*/
 
 
 /**

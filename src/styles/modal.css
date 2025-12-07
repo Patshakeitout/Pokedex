@@ -1,44 +1,71 @@
 /* --- Modal Style (<dialog>) --- */
 
+
 .modal {
+    display: flex;
+    justify-content: left;
     background: none;
     border-image: linear-gradient(hsl(55.25deg 84.16% 30.01% / 61%), hsl(50deg 65.08% 59.41% / 60%)) fill 1;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 100vmax rgba(0, 0, 0, .5);
-    max-width: 400px;
-    aspect-ratio: 4/5;
-    padding: 0;
+    max-width: 500px;
+    font-size: 18px;
+    text-align: left;
 }
 
-.modal-content {
-    padding: 30px;
+
+hgroup {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-text-main);
 }
 
-.modal h2 {
-    color: #dedfe7;
-    margin-top: 0;
+figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.modal-subtitle {
-    color: #616161;
-    font-size: 1em;
-    margin-bottom: 20px;
+#img-poke {
+    width: 200px;
+}
+
+/* Abilities*/
+.card-abilities {
+    margin: 0;
+    display: flex;
+    justify-content: left;
+}
+
+.card-abilities dl {
+  margin: 0;
+  display: flex;
+  gap: 0.35rem;
+  font-size: 22px;
+  color: var(--color-text-main);
+}
+
+.card-abilities dt {
+  font-weight: 600;
+}
+
+.card-abilities dd {
+  margin: 0;
+  color: var(--color-text-main);
+  text-transform: capitalize;
 }
 
 .modal footer {
-    margin-top: 20px;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
     background: unset!important;
 }
 
+.btn-flat {
+    color: var(--color-text-main);
 
-#modalCloseButton {
-    background-color: #3f51b5;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
 }
+
+
 
 
 /* Dialog polyfill/fallback for browsers that don't fully support <dialog> */
