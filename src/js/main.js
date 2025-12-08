@@ -24,7 +24,7 @@ const CARD_SCHEMA = {
     base_experience: ["object"],
     abilities: ["object"],
     moves: ["object"],
-    stats: ["object"]    
+    stats: ["object"]
 };
 
 
@@ -37,11 +37,6 @@ const initApp = async () => {
     cards = await composeCardData(1);
     renderCards(cards);
     renderPagination(1);
-
-    $('.modal').modal({
-        opacity: 0.5   // ← sets overlay opacity
-    });
-
 
     return cards;
 };
@@ -78,7 +73,7 @@ const renderCards = (cards) => {
 const composeCardData = async (pageNumber) => {
     renderSpinner();
 
-    let cards = [];
+    cards = [];
     let firstId = PAGE_CARDS * (pageNumber - 1) + 1;
     let lastId = (pageNumber === TOTAL_PAGES) ? 1025 : PAGE_CARDS * pageNumber;
 
@@ -158,11 +153,12 @@ const bindListeners = (cards) => {
     });
 
     document.querySelector('.modal').addEventListener('click', (e) => {
-        const cardId = Number(document.querySelector('.modal').querySelector('#card-id').textContent);
+        const cardIdText = document.querySelector('.modal').querySelector('#card-id').textContent;
+        const cardId = parseInt(cardIdText.replace("#", ""), cardIdText);
         const prevBtn = e.target.closest('#prev');
         const nextBtn = e.target.closest('#next');
 
-        if (prevBtn || nextBtn ) {
+        if (prevBtn || nextBtn) {
             const newId = cardId + (prevBtn ? -1 : +1);
             const newCard = cards.find(c => c.id === newId);
             changeModal(newCard);
@@ -193,10 +189,11 @@ const handlePaginationClick = async (event) => {
         return;
     }
     // 4. Aggregate Pokè data for the new page
-    let newCards = await composeCardData(pageNumber);
-    document.getElementById('search').addEventListener("click", () => filterPokeCards(newCards));
+    cards = [];
+    cards = await composeCardData(pageNumber);
+    document.getElementById('search').addEventListener("click", () => filterPokeCards(cards));
 
-    renderCards(newCards);
+    renderCards(cards);
 
     // 5. Rerender pagination to update active state
     renderPagination(pageNumber);

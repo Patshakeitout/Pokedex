@@ -2,16 +2,39 @@
 
 
 .modal {
+    overflow: none;
+
+    /* Responsive sizing */
+    width: 90vw !important;
+    max-width: 450px;
+    max-height: 90vh !important;
+
+    -ms-overflow-style: none;
+    /* IE und Edge */
+    scrollbar-width: none;
+    /* Firefox */
+
     display: flex;
     justify-content: left;
     background: none;
     border-image: linear-gradient(hsl(55.25deg 84.16% 30.01% / 61%), hsl(50deg 65.08% 59.41% / 60%)) fill 1;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 100vmax rgba(0, 0, 0, .5);
-    max-width: 500px;
     font-size: 18px;
     text-align: left;
 }
 
+.modal .modal-content {
+    padding: 16px 16px 12px 16px;
+}
+
+/* Verbergen für WebKit-Browser (Chrome, Safari, Edge, Opera) */
+.modal::-webkit-scrollbar {
+    display: none;
+    /* Macht die Scrollleiste unsichtbar */
+    width: 0;
+    /* Stellt sicher, dass kein Platz reserviert wird */
+    height: 0;
+}
 
 hgroup {
     display: flex;
@@ -22,11 +45,13 @@ hgroup {
 figure {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    margin: 0;
 }
 
 #img-poke {
     width: 200px;
+    padding: 0;
 }
 
 /* Abilities*/
@@ -37,35 +62,51 @@ figure {
 }
 
 .card-abilities dl {
-  margin: 0;
-  display: flex;
-  gap: 0.35rem;
-  font-size: 22px;
-  color: var(--color-text-main);
+    margin: 0;
+    display: flex;
+    gap: 0.35rem;
+    font-size: 20px;
+    color: var(--color-text-main);
 }
 
 .card-abilities dt {
-  font-weight: 600;
+    font-weight: 600;
 }
 
 .card-abilities dd {
-  margin: 0;
-  color: var(--color-text-main);
-  text-transform: capitalize;
+    margin: 0;
+    color: var(--color-text-main);
+    text-transform: capitalize;
 }
+
+.collapsible-header {
+    background-color: unset;
+    color: var(--color-text-main);
+    font-weight: 500;
+}
+
+.collapsible-body span {
+    text-transform: capitalize;
+    color: var(--color-text-main);
+    font-size: 16px;
+}
+
 
 .modal footer {
     display: flex;
     justify-content: space-between;
-    background: unset!important;
+    background: unset !important;
+    margin-top: 24px;
 }
 
 .btn-flat {
     color: var(--color-text-main);
-
+    padding: 0;
 }
 
-
+.btn-flat i {
+    font-size: 42px;
+}
 
 
 /* Dialog polyfill/fallback for browsers that don't fully support <dialog> */
