@@ -7,7 +7,6 @@
 /* --- Card Styles--- */
 .card {
     aspect-ratio: 4 / 5;
-    /* margin: 0; */
     max-width: 450px;
     width: 100%;
 }
@@ -29,9 +28,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    /* Material rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.05);
-    /* Material shadow */
     padding: 24px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -42,7 +39,6 @@
 
 .card-grid article:hover {
     transform: translateY(-8px);
-    /* Lift effect on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -57,8 +53,6 @@
     align-items: center;
     position: relative;
     flex: 1;
-    /* take available space */
-    /* margin: 0; */
 }
 
 .poke-figure img {
@@ -69,13 +63,11 @@
     transition: opacity 0.3s ease;
 }
 
-/* back image hidden at start */
 .poke-figure .back {
   opacity: 0;
-  pointer-events: none;        /* prevents hover glitch */
+  pointer-events: none;
 }
 
-/* swap on hover */
 .poke-figure:hover .front {
   opacity: 0;
 }
@@ -114,7 +106,6 @@
     border-radius: 999px;
     text-transform: capitalize;
     color: var(--color-info);
-    /*background-color and border set by JS */
     width: fit-content; /* keeps ellipses snug */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.2s, transform 0.2s;
@@ -129,7 +120,6 @@
 .hw {
     display: flex;
     flex-direction: column;
-    /* PUT hw to right bottom */
     align-self: flex-end;
     color: var(--color-info);
     margin: 0;
