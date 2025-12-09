@@ -252,37 +252,50 @@ const bindListeners = () => {
     bindCloseEvents();
 };
 
-
 /**
- * Handles click events on pagination links, fetches new data, 
- * and re-renders the cards and the pagination UI.
+ * Handles click events on pagination links, returns page number. 
+ ** @function returnPageNumber
  * @loc 11
  * @param {Event} event - The click event object.
- * @returns {void}
+ * @return {{aTag: String , pageNumber: number}} Object with HTML-String (a-tag) and pageNumber.
  */
-const handlePaginationClick = async (event) => {
-    event.preventDefault();
+const returnPageNumber = (e) => {
+    e.preventDefault();
 
     if (isLoading) {
         console.log("Loading in progress, click ignored.");
         return;
     }
 
-    const aTag = event.target.closest('a');
+    const aTag = e.target.closest('a');
     const pageNumber = +aTag.getAttribute('data-page');
 
     if (isNaN(pageNumber) || pageNumber < 1) {
         return;
     }
 
+    return {aTag: aTag, pageNumber: pageNumber};
+};
+
+
+/**
+ * Handles click events on pagination links, fetches new data, 
+ * and re-renders the cards and the pagination UI.
+ ** @function handlePaginationClick
+ * @loc 13
+ * @param {Event} event - The click event object.
+ */
+const handlePaginationClick = async (e) => {
+    const pageObject = returnPageNumber(e);
     isLoading = true;
+
     $('li.waves-effect').addClass('disabled').removeClass('waves-effect');
-    $(aTag).parent('li').addClass('active').siblings().removeClass('active');
+    $(pageObject.aTag).parent('li').addClass('active').siblings().removeClass('active');
 
     try {
-        cards = await composeCardData(pageNumber);
+        cards = await composeCardData(pageObject.pageNumber);
         renderCards(cards);
-        renderPagination(pageNumber);
+        renderPagination(pageObject.pageNumber);
     } catch (err) {
         console.error(err);
     } finally {
