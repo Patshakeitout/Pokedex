@@ -7,8 +7,9 @@
 /* --- Card Styles--- */
 .card {
     aspect-ratio: 4 / 5;
-    margin: 0;
-    max-height: 450px;
+    /* margin: 0; */
+    max-width: 450px;
+    width: 100%;
 }
 
 .card-title {
@@ -18,9 +19,9 @@
 }
 
 .card-grid h3 {
-    font-size: 1.4rem;
+    font-size: 24px;
     color: var(--color-info);
-    font-weight: 500;
+    font-weight: 600;
     margin: 0;
 }
 
@@ -54,29 +55,42 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     flex: 1;
     /* take available space */
-    margin: 0;
-    /* remove default figure margin */
-    padding: 10px 0;
+    /* margin: 0; */
 }
 
-/* Control image size here */
 .poke-figure img {
-    width: 62%;
-    /* scale factor */
-    max-width: 210px;
-    /* max limit */
+    position: absolute;
+    width: 180px;
+    height: 180px; 
     object-fit: contain;
-    transition: transform 0s ease-in-out;
+    transition: opacity 0.3s ease;
 }
 
-.card:hover .poke-figure img {
-    transition: transform 2s ease-in-out;
-    transform: rotate(360deg);
+/* back image hidden at start */
+.poke-figure .back {
+  opacity: 0;
+  pointer-events: none;        /* prevents hover glitch */
+}
+
+/* swap on hover */
+.poke-figure:hover .front {
+  opacity: 0;
+}
+
+.poke-figure:hover .back {
+  opacity: 1;
 }
 
 /* Footer layout */
+.card-grid article footer {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+
 .card-grid article footer.stats {
     margin-top: auto;
     padding-top: 12px;
@@ -98,7 +112,6 @@
 .types-vertical li {
     padding: 4px 12px;
     border-radius: 999px;
-    font-size: 16px;
     text-transform: capitalize;
     color: var(--color-info);
     /*background-color and border set by JS */
@@ -119,7 +132,6 @@
     /* PUT hw to right bottom */
     align-self: flex-end;
     color: var(--color-info);
-    font-size: 16px;
     margin: 0;
     opacity: 0.9;
 }

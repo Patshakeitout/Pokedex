@@ -42,7 +42,7 @@ const getPillStyleString = (typeName) => {
 
     // Text color (color) will be set in card.css
     return `background-color: ${pillColor}; 
-            border: 1px solid ${pillBorderColor};
+            border: 2px solid ${pillBorderColor};
             `;
 };
 
@@ -57,6 +57,10 @@ export const generateSingleCardHtml = (card) => {
         return `<li style="${pillStyle}">${t}</li>`;
     }).join("");
 
+    if (card.imgBack == "na") {
+        card.imgBack = card.img;
+    }
+
     // 3. Return the HTML string with styles embedded
 
     //data-t="${card.name} ${card.id}" data-sub="Category ${card.id}"
@@ -69,7 +73,8 @@ export const generateSingleCardHtml = (card) => {
         </hgroup>
 
         <figure class="poke-figure">
-            <img src="${card.img}" alt="${card.name}" loading="lazy">
+            <img src="${card.imgDefault}" alt="${card.name}" loading="lazy" class="front">
+            <img src="${card.imgBack}" alt="${card.name}" loading="lazy" class="back">
         </figure>
 
         <footer class="stats">

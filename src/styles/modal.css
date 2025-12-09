@@ -1,6 +1,5 @@
 /* --- Modal Style (<dialog>) --- */
 
-
 .modal {
     overflow: none;
 
@@ -84,6 +83,14 @@ figure {
     color: var(--color-text-main);
     font-weight: 500;
 }
+
+.collapsible-header:hover {
+    background-color: #333333;
+    opacity: 0.3;
+    color: var(--color-text-main);
+    font-weight: 500;
+}
+
 
 .collapsible-body span {
     text-transform: capitalize;

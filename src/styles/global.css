@@ -41,6 +41,10 @@ header {
     color: var(--color-text-main);
 }
 
+#title {
+    color: var(--color-text-main);
+}
+
 header img {
     height: 40px;
 }
@@ -55,45 +59,60 @@ header h1 {
 
 header input[type="search"] {
     font-size: 18px;
-    height: 38px;
-    margin-right: 16px;
+    height: 40px;
     padding-left: 12px;
     border-radius: 16px;
+    margin: 8px 12px 0 12px 
+    
 }
 
 header .btn {
     border-radius: 16px;
     width: 60px;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #d32f2f!important;
 }
 
 main {
-    max-width: 95vw;
-    margin: auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 section {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.nav {
-    margin-top: 38px;
+    padding: 0 16px;
 }
 
 /* --- Card Grid --- */
 .card-grid {
     display: grid;
-    /* Responsive Grid: Adjusts columns based on screen width */
-    grid-template-columns: repeat(auto-fit, minmax(253px, 8fr));
+    grid-template-columns: repeat(auto-fit, minmax(253px, 1fr));
+    /* justify-items: center; */
+    align-items: center;
     gap: 45px;
+    max-width: 1440px;
+    /* text-align: center; */
+    margin: 0 auto; 
+}
+
+.preloader-wrapper {
+    display: block;
+    margin: auto auto; /* Horizontal centering if parent is not flex/grid */
+    /* Note: Materialize may already have styles, so direct centering is often best on the parent */
 }
 
 
-@media (max-width: 480px) {
+@media (max-width: 714px) {
     header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+
     }
 
     header h1 {
@@ -102,6 +121,58 @@ section {
 
     header input[type="search"] {
         width: 100%;
-        max-width: none;
+        max-width: 200px;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 45px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 421px) {
+    /*
+    1. CORRECTED: The media query syntax was missing 'px'. It should be (max-width: 421px).
+    2. TARGET: We target the header's flex container for centering.
+    */
+    header {
+        /* Already set to flex-direction: column in the 714px query, which helps with centering the form element itself */
+        align-items: center; /* This centers the #search form container within the header */
+    }
+    
+    /* Target the form container */
+    #search {
+        /* You already had flex-direction: column in the previous answer, which is good. */
+        display: flex;
+        flex-direction: column; /* Stacks children vertically */
+        align-items: center; /* Makes children take full width of the form */
+        /*
+        The form itself is centered because the header now has align-items: center
+        and the #search form has an implicit width from its children, or you can set a max-width here if needed.
+        */
+        width: 100%; /* Allows the form to take up the available width */
+        max-width: 200px; /* Optional: Constrain the form's maximum width on small screens */
+        margin-top: 12px;
+    }
+
+    /* Target the individual form elements */
+    #search > * {
+        /* Add vertical spacing (margin or padding) */
+        margin-bottom: 10px; /* Vertical spacing between elements */
+        /*
+        To override the existing Materialize/global styles on input:
+        header input[type="search"] had a margin-top of 8px (margin: 8px 12px 0 12px).
+        We reset all margins here for consistency.
+        */
+        margin: 0 0 10px 0 !important;
+        width: 100% !important; /* Ensure elements take full width when stacked */
+        box-sizing: border-box; /* Important for padding/border not to increase total width beyond 100% */
+    }
+    
+    /* Optional: Remove margin/padding from the last element to prevent extra space at the bottom */
+    #search > *:last-child {
+        margin-bottom: 0 !important;
     }
 }

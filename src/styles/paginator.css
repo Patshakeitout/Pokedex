@@ -1,7 +1,6 @@
-.pagination li.disabled a {
-    cursor: default; /* Changes cursor to a default arrow */
-    color: #666666; /* Your specified disabled color */
-    pointer-events: none; /* Ensures the link is truly unclickable */
+.pagination {
+    padding: 20px 0;
+    text-align: center;
 }
 
 /* Targets all links (a) inside list items (li) within .pagination */
@@ -11,9 +10,19 @@
     text-decoration: none; /* Removes the default link underline */
 }
 
-/* Targets enabled links when hovered over or focused */
 .pagination li a:hover,
 .pagination li a:focus {
-    color: var(--color-text-main); /* Keeps the color the same or change it if you wish! */
-    font-size: 110%; /* Increases the font size by 10% */
+    font-size: 180%;
+}
+
+.pagination li.disabled a {
+    cursor: none; /* Changes cursor to a default arrow */
+    color: #666666; /* Your specified disabled color */
+    pointer-events: none; /* Ensures the link is truly unclickable */   
+}
+
+.pagination li.active a {
+    cursor: none; /* Changes cursor to a default arrow */
+    color: #666666; /* Your specified disabled color */
+    pointer-events: none; /* Ensures the link is truly unclickable */   
 }
