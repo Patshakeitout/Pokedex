@@ -2,8 +2,6 @@
 
 .modal {
     overflow: none;
-
-    /* Responsive sizing */
     width: 90vw !important;
     max-width: 450px;
     max-height: 90vh !important;
@@ -29,9 +27,7 @@
 /* Verbergen für WebKit-Browser (Chrome, Safari, Edge, Opera) */
 .modal::-webkit-scrollbar {
     display: none;
-    /* Macht die Scrollleiste unsichtbar */
     width: 0;
-    /* Stellt sicher, dass kein Platz reserviert wird */
     height: 0;
 }
 
