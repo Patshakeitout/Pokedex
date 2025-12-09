@@ -1,5 +1,6 @@
 /**
- * @fileoverview main.js for application
+ * @file main.js
+ * @fileoverview Main script for initialization of app and binding of core listeners.
  */
 
 import { renderSpinner, fetchData, validateSchema } from './utils/helpers.js';
@@ -149,7 +150,7 @@ const createCardProps = (id, res) => {
  * Binds all grid event handlers with availability of cards data.
  * * It uses Event Delegation on the '#cardGrid' element because the 
  * card content is dynamically rendered.
- ** @function bindGridEvents
+ * @function bindGridEvents
  * @loc 5
  * @param {cards} - The Poké cards json-array.
  */
@@ -167,7 +168,7 @@ const bindGridEvents = () => {
  * * It uses Event Delegation on the '#cardModal' element because the 
  * modal content is dynamically rendered.
  *
- ** @function bindModalEvents
+ * @function bindModalEvents
  * @loc 14
  */
 const bindModalEvents = () => {
@@ -193,7 +194,7 @@ const bindModalEvents = () => {
 /**
  * Binds all search event handlers.
  *
- ** @function bindSearchEvents
+ * @function bindSearchEvents
  * @loc 13
  */
 const bindSearchEvents = () => {
@@ -225,7 +226,7 @@ const bindSearchEvents = () => {
 /**
  * Binds all search event handlers.
  *
- ** @function bindCloseEvents
+ * @function bindCloseEvents
  * @loc 7
  */
 const bindCloseEvents = () => {
@@ -240,11 +241,11 @@ const bindCloseEvents = () => {
 
 
 /**
-* Binds necessary event handlers.
-** Grid, Modal, Search, Close
-** @function bindListeners 
-* @loc 4
-*/
+ * Binds necessary event handlers.
+ ** Grid, Modal, Search, Close
+ * @function bindListeners 
+ * @loc 4
+ */
 const bindListeners = () => {
     bindGridEvents();
     bindModalEvents();
@@ -254,7 +255,7 @@ const bindListeners = () => {
 
 /**
  * Handles click events on pagination links, returns page number. 
- ** @function returnPageNumber
+ * @function returnPageNumber
  * @loc 11
  * @param {Event} event - The click event object.
  * @return {{aTag: String , pageNumber: number}} Object with HTML-String (a-tag) and pageNumber.
@@ -281,7 +282,7 @@ const returnPageNumber = (e) => {
 /**
  * Handles click events on pagination links, fetches new data, 
  * and re-renders the cards and the pagination UI.
- ** @function handlePaginationClick
+ * @function handlePaginationClick
  * @loc 13
  * @param {Event} event - The click event object.
  */
@@ -319,7 +320,7 @@ const handlePaginationClick = async (e) => {
  * RIGHT EDGE:
  * ‹ 1  …  [29 30 31 32 33 34]  35 ›
  * ```
- * *@function renderPagination
+ * @function renderPagination
  * @loc 10
  * @param {number} page - The currently active page number.
  * 
@@ -344,7 +345,7 @@ const renderPagination = (page) => {
 
 /**
  * Renders subset of Poke card data given by search string
- * 
+ * @function filterPokeCards
  * @loc 9
  * @param {array} pokeData 
  */
