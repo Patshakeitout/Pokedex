@@ -120,6 +120,10 @@ section {
         max-width: 200px;
     }
 
+    .logo-title img {
+        margin-right: 16px;
+    }
+
     .card-grid {
         grid-template-columns: 1fr;
         justify-items: center;
@@ -131,6 +135,10 @@ section {
 @media (max-width: 421px) {
     header {
         align-items: center;
+    }
+
+    .logo-title img {
+        margin-right: 16px;
     }
     
     /* Target the form container */
