@@ -319,9 +319,10 @@ const handlePaginationClick = async (e) => {
  * RIGHT EDGE:
  * ‹ 1  …  [29 30 31 32 33 34]  35 ›
  * ```
- * @loc 8
+ * *@function renderPagination
+ * @loc 10
  * @param {number} page - The currently active page number.
- * @returns {void}
+ * 
  */
 const renderPagination = (page) => {
     const uls = document.querySelectorAll(".pagination");
@@ -344,7 +345,7 @@ const renderPagination = (page) => {
 /**
  * Renders subset of Poke card data given by search string
  * 
- * @loc 8
+ * @loc 9
  * @param {array} pokeData 
  */
 function filterPokeCards(pokeData) {
