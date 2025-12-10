@@ -12,8 +12,15 @@ body {
     margin: 0;
     background-color: var(--bg-dark-base);
     background-image: url("../assets/media/bg-wood.png");
-    background-size: cover;
-    background-repeat: no-repeat;
+    /* 1. Verhindert, dass das Bild beim Scrollen mitwächst und hält es fixiert */
+    background-attachment: fixed; 
+    
+    /* 2. Sorgt dafür, dass das gesamte Bild im Viewport sichtbar ist, 
+       ohne abgeschnitten zu werden. */
+    background-size: contain; 
+    
+    /* 3. Ermöglicht das Kacheln (Wiederholen), falls das Bild kleiner als der Viewport ist */
+    background-repeat: repeat; /* Von no-repeat auf repeat geändert */
 }
 
 @font-face {
@@ -31,13 +38,19 @@ body {
 }
 
 header {
+    /* Sticky header */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 16px 32px;
+
+    padding: 0 24px;
     background-color: var(--bg-dark-surface);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     color: var(--color-text-main);
+    margin-bottom: 48px;
 }
 
 #title {
@@ -56,6 +69,12 @@ header h1 {
     flex: 1;
 }
 
+.header-forms {
+    display: flex;
+    flex-direction: column;
+}
+
+
 header input[type="search"] {
     font-size: 18px;
     height: 40px;
@@ -73,6 +92,33 @@ header .btn {
 
 .btn:hover {
     background-color: #d32f2f!important;
+}
+
+.page-input {
+    margin: 0;
+}
+
+/* form container */
+#page-size {
+    margin-top: 0 0 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* container input + btn */
+.page-input {
+    display: flex;
+    justify-content: center;
+}
+
+.input-field {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    margin: 0;
 }
 
 main {
