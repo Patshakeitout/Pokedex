@@ -32,9 +32,30 @@
     <header>
         <section class="logo-title">
             <a href="/projects/pokedex"><img src="./src/assets/media/favicon.png" alt="Pokédex Logo"></a>
-            <a id="title" href="/projects/pokedex"><h1>P o k é d e x</h1></a>
+            <a id="title" href="/projects/pokedex">
+                <h1>P o k é d e x</h1>
+            </a>
         </section>
-        
+
+        <form id="page-size" aria-label="Pokémon Search">
+            <div class="row">
+                <div class="input-field col s3">
+                    <input id="page_size" type="number" value="20">
+                    <label for="page_size"># Pokémons</label>
+                </div>
+
+                <button id="btn-page-number" class="btn red waves-effect waves-light" type="submit"
+                    aria-label="Seitengröße aktualisieren">
+                    <i class="material-icons" aria-hidden="true">autorenew</i>
+                </button>
+            </div>
+
+
+            <section class="nav">
+                <ul class="pagination"></ul>
+            </section>
+        </form>
+
         <form id="search" aria-label="Pokémon Search">
             <button id="btn-close" class="btn red waves-effect waves-light" type="button" name="action">
                 <i class="material-icons">close</i>
@@ -48,15 +69,7 @@
     </header>
 
     <main>
-        <section class="nav">
-            <ul class="pagination"></ul>
-        </section>
-
         <section class="card-grid" id="cardGrid"></section>
-
-        <section class="nav">
-            <ul class="pagination"></ul>
-        </section>
     </main>
 
     <dialog id="cardModal" class="modal">

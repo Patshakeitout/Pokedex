@@ -6,14 +6,9 @@
 import { renderSpinner, fetchData, validateSchema } from './utils/helpers.js';
 import { generateSingleCardHtml } from './card.js';
 import { handleCardClick, changeModal } from './modal.js';
-import {
-    createPageItem, computeWindow, renderLeftEdge, renderWindow,
-    renderRightEdge, PAGE_CARDS, TOTAL_PAGES
-} from './paginator.js'
+import { createPageItem, computeWindow, renderLeftEdge, renderWindow, renderRightEdge } from './paginator.js'
 
 const URL_BASE = "https://pokeapi.co/api/v2/pokemon/";
-let cards = [];
-let isLoading = false;
 const CARD_SCHEMA = {
     id: "number",
     name: "string",
@@ -29,12 +24,23 @@ const CARD_SCHEMA = {
     stats: ["object"]
 };
 
+let cards = [];
+let isLoading = false;
+let currentPagesize = 20;
+
+
 
 $(document).ready(async () => {
     cards = await initApp();
 
+    bindListeners();
+
     $(".pagination").off('click', 'li.waves-effect a');
     $(".pagination").on('click', 'li.waves-effect a', handlePaginationClick);
+
+    $("#page-size").off('click', '#btn-page-number');
+    $("#page-size").on('click', '#btn-page-number', handlePagesizeClick);
+
 });
 
 
@@ -46,24 +52,26 @@ $(document).ready(async () => {
  * @returns {Promise<Card[]>} Resolves with the full list of cards of initial page 1.
  */
 const initApp = async () => {
-    bindListeners();
+    const { cards, numberPages } = await composeCardData(1);
 
-    cards = await composeCardData(1);
     renderCards(cards);
-    renderPagination(1);
+    renderPagination(1, numberPages);
 
     return cards;
 };
 
 
 /**
- * Renders cards
+ * Renders cards as a function of boolean nonAppendFlag
+ * * If this flag is false, cards are appended to existing ones on the page.
  * @loc 6
  * @function renderCards
  * @param {array} cards - Json Array of cards 
+ * 
  */
-const renderCards = (cards) => {
-    $('#cardGrid').empty();
+const renderCards = (cards, nonAppendFlag = true) => {
+    if (nonAppendFlag) { $('#cardGrid').empty(); };
+
     let allCardsHtml = '';
 
     for (let card of cards) {
@@ -79,15 +87,18 @@ const renderCards = (cards) => {
  * @loc 11
  * @async
  * @function composeCardData
- * @param {pageNumber} - The page number from pagination or page 1 to be rendered.
- * @returns {array} - Array of Pokémons
+ * @param {pageNumber} The page number from pagination or page 1 to be rendered.
+ * @returns {{ cards: Array, numberPages: Number }} Object with array of Pokémons and total number of pages for pagination 
  */
 const composeCardData = async (pageNumber) => {
-    renderSpinner();
+    const pageSize = currentPagesize;
+    const numberPages = Math.ceil(1025 / pageSize);
 
+    renderSpinner();
     cards = [];
-    let firstId = PAGE_CARDS * (pageNumber - 1) + 1;
-    let lastId = (pageNumber === TOTAL_PAGES) ? 1025 : PAGE_CARDS * pageNumber;
+
+    let firstId = pageSize * (pageNumber - 1) + 1;
+    let lastId = (pageNumber === numberPages) ? 1025 : pageSize * pageNumber;
 
     for (let id = firstId; id <= lastId; id++) {
         let currentUrl = `${URL_BASE}` + id;
@@ -97,7 +108,7 @@ const composeCardData = async (pageNumber) => {
         cards.push(createCardProps(id, res));
     }
 
-    return cards;
+    return { cards, numberPages };
 }
 
 
@@ -192,6 +203,30 @@ const bindModalEvents = () => {
 
 
 /**
+ * Bindet den Event-Handler für das Formular zur Seitengrößenänderung.
+ * 
+ */
+const handlePagesizeClick = async () => {
+    const input = document.getElementById('page_size');
+    let newPageSize = parseInt(input.value);
+
+    currentPagesize = newPageSize;
+
+    isLoading = true;
+
+    try {
+        const { cards, numberPages } = await composeCardData(1);
+
+        isLoading = false;
+        renderCards(cards);
+        renderPagination(1, numberPages);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+
+/**
  * Binds all search event handlers.
  *
  * @function bindSearchEvents
@@ -275,7 +310,7 @@ const returnPageNumber = (e) => {
         return;
     }
 
-    return {aTag: aTag, pageNumber: pageNumber};
+    return { aTag: aTag, pageNumber: pageNumber };
 };
 
 
@@ -294,9 +329,9 @@ const handlePaginationClick = async (e) => {
     $(pageObject.aTag).parent('li').addClass('active').siblings().removeClass('active');
 
     try {
-        cards = await composeCardData(pageObject.pageNumber);
+        const { cards, numberPages } = await composeCardData(pageObject.pageNumber);
         renderCards(cards);
-        renderPagination(pageObject.pageNumber);
+        renderPagination(pageObject.pageNumber, numberPages);
     } catch (err) {
         console.error(err);
     } finally {
@@ -321,25 +356,22 @@ const handlePaginationClick = async (e) => {
  * ‹ 1  …  [29 30 31 32 33 34]  35 ›
  * ```
  * @function renderPagination
- * @loc 10
+ * @loc 8
  * @param {number} page - The currently active page number.
  * 
  */
-const renderPagination = (page) => {
-    const uls = document.querySelectorAll(".pagination");
+const renderPagination = (page, totalPages) => {
+    const ul = document.querySelector(".pagination");
+    const { start, end } = computeWindow(page, totalPages);
 
-    const { start, end } = computeWindow(page);
+    ul.innerHTML = '';
 
-    uls.forEach(ul => {
-        ul.innerHTML = '';
+    const add = (label, value, disabled, active) =>
+        ul.appendChild(createPageItem(label, value, disabled, active));
 
-        const add = (label, value, disabled, active) =>
-            ul.appendChild(createPageItem(label, value, disabled, active));
-
-        renderLeftEdge(add, page, start, end);
-        renderWindow(add, page, start, end);
-        renderRightEdge(add, page, start, end);
-    });
+    renderLeftEdge(add, page, start, end);
+    renderWindow(add, page, start, end);
+    renderRightEdge(add, page, start, end, totalPages);
 };
 
 

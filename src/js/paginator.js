@@ -3,8 +3,8 @@
  * @fileoverview Module for the paginator component.
  */
 
-export const PAGE_CARDS = 20;
-export const TOTAL_PAGES = Math.ceil(1025 / PAGE_CARDS);
+//export let PAGE_CARDS = 20;
+//export let TOTAL_PAGES = Math.ceil(1025 / PAGE_CARDS);
 const INNER_CIRCLE = 7;
 const OFFSET = Math.floor(INNER_CIRCLE / 2);
 
@@ -38,24 +38,25 @@ export const createPageItem = (label, page, disabled = false, active = false) =>
  * @loc 14
  * @function computeWindow
  * @param {number} page - The target page number for the data attribute.
+ * @param {number} totalPages - The entire page numbers calculated dynamically.
  * @returns {json} {start: start, end: end} - JSON that contains start and end.
  */
-export const computeWindow = (page) => {
+export const computeWindow = (page, totalPages) => {
     let start = Math.max(2, page - OFFSET);
-    let end = Math.min(TOTAL_PAGES - 1, page + OFFSET);
+    let end = Math.min(totalPages - 1, page + OFFSET);
 
     if (page <= INNER_CIRCLE + 1 - OFFSET) {
-        end = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE + 1);
+        end = Math.min(totalPages - 1, INNER_CIRCLE + 1);
     }
     
     if (start < 2) {
-        end = Math.min(TOTAL_PAGES - 1, INNER_CIRCLE);
+        end = Math.min(totalPages - 1, INNER_CIRCLE);
         start = 2;
     }
     
-    if (page >= TOTAL_PAGES - INNER_CIRCLE + OFFSET) {
-        start = Math.max(2, TOTAL_PAGES - INNER_CIRCLE);
-        end = TOTAL_PAGES - 1;
+    if (page >= totalPages - INNER_CIRCLE + OFFSET) {
+        start = Math.max(2, totalPages - INNER_CIRCLE);
+        end = totalPages - 1;
     }
 
     return { start: start, end: end };
@@ -92,11 +93,12 @@ export const renderWindow = (add, page, start, end) => {
  * Renders carousel for pagination.
  * @loc 3
  * @param {CallableFunction} add - Callable that inherits createPageItem (label, value, disable, active)
+ * @param {number} totalPages - The entire page numbers calculated dynamically.
  * @returns {json} {start: start, end: end} - JSON that contains start and end.
  */
-export const renderRightEdge = (add, page, start, end) => {
-    if (end < TOTAL_PAGES - 1) add("…", null, true);
+export const renderRightEdge = (add, page, start, end, totalPages) => {
+    if (end < totalPages - 1) add("…", null, true);
 
-    add(TOTAL_PAGES, TOTAL_PAGES, false, page === TOTAL_PAGES);
-    add('<i class="material-icons">chevron_right</i>', Math.min(TOTAL_PAGES, page + 1), page === TOTAL_PAGES);
+    add(totalPages, totalPages, false, page === totalPages);
+    add('<i class="material-icons">chevron_right</i>', Math.min(totalPages, page + 1), page === totalPages);
 };
