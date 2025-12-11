@@ -268,9 +268,10 @@ const bindSearchEvents = () => {
  */
 const bindCloseEvents = () => {
     const btnClose = document.getElementById('btn-close');
+    const inputSearch = document.getElementById('input-search');
     if (btnClose) {
         btnClose.addEventListener('click', () => {
-            input.value = '';
+            inputSearch.value = '';
             renderCards(cards);
         });
     }

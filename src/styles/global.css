@@ -1,6 +1,7 @@
 @import url("./card.css");
 @import url("./paginator.css");
 @import url("./modal.css");
+@import url("./rudolph.css");
 
 :root {
     --bg-dark-base: #222222;
@@ -9,7 +10,7 @@
 }
 
 body {
-    margin: 0;
+    margin: 0 auto;
     background-color: var(--bg-dark-base);
     background-image: url("../assets/media/bg-wood.png");
     /* 1. Verhindert, dass das Bild beim Scrollen mitwächst und hält es fixiert */
@@ -43,6 +44,9 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    max-width: 1920px;
+    margin: auto;
+    width: 100%;
 
     display: flex;
     justify-content: space-between;
@@ -52,6 +56,8 @@ header {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     color: var(--color-text-main);
     margin-bottom: 48px;
+
+    transform: translateZ(0);
 }
 
 #title {
@@ -99,9 +105,9 @@ header .btn {
     justify-content: space-between;
 }
 
-#page-size .input-field { 
-  margin-top: 0;
-  margin-bottom: 0;   
+#page-size .input-field {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #page-size input {
@@ -136,7 +142,8 @@ header .btn {
     height: 36px;
     width: 100%;
     font-weight: 500;
-    font-size: 18px;;
+    font-size: 18px;
+    ;
     padding: 0 12px 0 12px;
     border: 0;
     border-radius: 16px;
@@ -148,16 +155,23 @@ header .btn {
     font-weight: 400;
 }
 
+.section-pagination {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
 .pagination {
     margin: 0;
+    padding: 0;
 }
 
 main {
     padding: 0 24px;
     box-sizing: border-box;
-    text-align: center;
+    max-width: 1920px;
+    margin: 0 auto;
 }
-
 
 /* --- Card Grid --- */
 .card-grid {
@@ -165,7 +179,6 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(253px, 1fr));
     align-items: center;
     gap: 45px;
-    max-width: 1440px;
     margin: 0 auto;
 }
 
@@ -175,24 +188,39 @@ main {
 }
 
 
-@media (max-width: 714px) {
+@media (max-width: 975px) {
     header {
         flex-direction: column;
         align-items: center;
-
-    }
-
-    header h1 {
-        margin: 0.5rem 0;
-    }
-
-    header input[type="search"] {
-        width: 100%;
-        max-width: 200px;
     }
 
     .logo-title img {
-        margin-right: 16px;
+        margin-right: 4px;
+    }
+
+
+    .section-pagination {
+        order: 999;
+        width: 100%;
+        margin-top: 14px;
+    }
+
+    #page-size {
+        margin-top: 14px;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+        gap: 45px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 574px) {
+    header {
+        align-items: center;
+        padding-bottom: 8px;
     }
 
     .card-grid {
@@ -201,36 +229,8 @@ main {
         gap: 45px;
         width: 100%;
     }
-}
 
-@media (max-width: 421px) {
-    header {
-        align-items: center;
-    }
-
-    .logo-title img {
-        margin-right: 16px;
-    }
-
-    /* Target the form container */
-    #search {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: 200px;
-        margin-top: 12px;
-    }
-
-    /* Target the individual form elements */
-    #search>* {
-        margin-bottom: 10px;
-        margin: 0 0 10px 0 !important;
-        width: 100% !important;
-        box-sizing: border-box;
-    }
-
-    #search>*:last-child {
-        margin-bottom: 0 !important;
+    .pagination li a {
+        font-size: 16px;
     }
 }

@@ -26,9 +26,13 @@
 
     <!-- main.js -->
     <script type="module" src="./src/js/main.js" defer></script>
+    <script src="./src/js/rudolph.js" defer></script>
 </head>
 
 <body>
+    <figure class="rudolph">
+        <img src="./src/assets/media/rudolph.gif" alt="running rudolph" class="rudolph-gif">
+    </figure>
     <header>
         <figure class="logo-title">
             <a href="/projects/pokedex"><img src="./src/assets/media/favicon.png" alt="Pokédex Logo"></a>
@@ -37,7 +41,9 @@
             </a>
         </figure>
 
-        <ul class="pagination"></ul>
+        <section class="section-pagination">
+            <ul class="pagination"></ul>
+        </section>
 
         <section class="header-forms col ">
             <form id="page-size" aria-label="Pokémon Search">
