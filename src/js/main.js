@@ -38,9 +38,8 @@ $(document).ready(async () => {
     $(".pagination").off('click', 'li.waves-effect a');
     $(".pagination").on('click', 'li.waves-effect a', handlePaginationClick);
 
-    $("#page-size").off('click', '#btn-page-number');
-    $("#page-size").on('click', '#btn-page-number', handlePagesizeClick);
-
+    $("#page-size").off('submit');
+    $("#page-size").on('submit', handlePagesizeClick);
 });
 
 
@@ -206,7 +205,9 @@ const bindModalEvents = () => {
  * Bindet den Event-Handler für das Formular zur Seitengrößenänderung.
  * 
  */
-const handlePagesizeClick = async () => {
+const handlePagesizeClick = async (e) => {
+    if (e) e.preventDefault();
+
     const input = document.getElementById('page_size');
     let newPageSize = parseInt(input.value);
 
@@ -217,11 +218,12 @@ const handlePagesizeClick = async () => {
     try {
         const { cards, numberPages } = await composeCardData(1);
 
-        isLoading = false;
         renderCards(cards);
         renderPagination(1, numberPages);
     } catch (err) {
         console.error(err);
+    } finally {
+       isLoading = false; 
     }
 };
 

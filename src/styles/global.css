@@ -13,14 +13,15 @@ body {
     background-color: var(--bg-dark-base);
     background-image: url("../assets/media/bg-wood.png");
     /* 1. Verhindert, dass das Bild beim Scrollen mitwächst und hält es fixiert */
-    background-attachment: fixed; 
-    
+    background-attachment: fixed;
+
     /* 2. Sorgt dafür, dass das gesamte Bild im Viewport sichtbar ist, 
        ohne abgeschnitten zu werden. */
-    background-size: contain; 
-    
+    background-size: contain;
+
     /* 3. Ermöglicht das Kacheln (Wiederholen), falls das Bild kleiner als der Viewport ist */
-    background-repeat: repeat; /* Von no-repeat auf repeat geändert */
+    background-repeat: repeat;
+    /* Von no-repeat auf repeat geändert */
 }
 
 @font-face {
@@ -46,7 +47,7 @@ header {
     display: flex;
     justify-content: space-between;
 
-    padding: 0 24px;
+    padding: 30px 30px 24px 30px;
     background-color: var(--bg-dark-surface);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     color: var(--color-text-main);
@@ -72,16 +73,8 @@ header h1 {
 .header-forms {
     display: flex;
     flex-direction: column;
-}
-
-
-header input[type="search"] {
-    font-size: 18px;
-    height: 40px;
-    padding-left: 12px;
-    border-radius: 16px;
-    margin: 8px 12px 0 12px 
-    
+    text-align: right;
+    width: 200px;
 }
 
 header .btn {
@@ -91,30 +84,68 @@ header .btn {
 }
 
 .btn:hover {
-    background-color: #d32f2f!important;
+    background-color: #d32f2f !important;
 }
 
 .page-input {
     margin: 0;
 }
 
-/* form container */
+/* Pokés per page */
 #page-size {
-    margin-top: 0 0 0 0;
+    margin: 0 0 14px 0;
     display: flex;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: space-between;
 }
 
-/* container input + btn */
-.page-input {
-    display: flex;
-    justify-content: center;
+#page-size .input-field { 
+  margin-top: 0;
+  margin-bottom: 0;   
 }
 
-.input-field {
-    margin: 0;
+#page-size input {
+    margin-bottom: 0;
+    margin-top: 4px;
+    padding-left: 12px;
+    padding-right: 12px;
+    height: 36px;
+    width: 85px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 16px;
+    background-color: var(--color-text-main);
+}
+
+#page-size label {
+    padding-left: 12px;
+    font-size: 16px;
+    /*color: var(--color-text-main);*/
+}
+
+
+.section-search-btn {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    margin: 14px 0 0 0;
+
+}
+
+#input-search {
+    font-size: 18px;
+    height: 36px;
+    width: 100%;
+    font-weight: 500;
+    font-size: 18px;;
+    padding: 0 12px 0 12px;
+    border: 0;
+    border-radius: 16px;
+    background-color: var(--color-text-main);
+}
+
+.btn-search::placeholder {
+    color: grey;
+    font-weight: 400;
 }
 
 .pagination {
@@ -127,12 +158,6 @@ main {
     text-align: center;
 }
 
-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 16px;
-}
 
 /* --- Card Grid --- */
 .card-grid {
@@ -141,7 +166,7 @@ section {
     align-items: center;
     gap: 45px;
     max-width: 1440px;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 .preloader-wrapper {
@@ -186,11 +211,11 @@ section {
     .logo-title img {
         margin-right: 16px;
     }
-    
+
     /* Target the form container */
     #search {
         display: flex;
-        flex-direction: column; 
+        flex-direction: column;
         align-items: center;
         width: 100%;
         max-width: 200px;
@@ -198,14 +223,14 @@ section {
     }
 
     /* Target the individual form elements */
-    #search > * {
+    #search>* {
         margin-bottom: 10px;
         margin: 0 0 10px 0 !important;
         width: 100% !important;
         box-sizing: border-box;
     }
-    
-    #search > *:last-child {
+
+    #search>*:last-child {
         margin-bottom: 0 !important;
     }
 }
