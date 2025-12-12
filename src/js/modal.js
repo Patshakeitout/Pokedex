@@ -5,22 +5,13 @@
 
 
 /**
- * Build modal template.
+ * Return modal template.
  * @function
- * @loc 8
- * @param {Array} card - Card data.
- * @return {String} modalContent - Template string for modal content.
+ * @param {Array} card Card data.
+ * @return {Array} abilityNames  
  */
-const buildModalTemplate = (card) => {
-    const abilityNames = card.abilities
-        .map(a => a.ability.name)
-        .join(", ");
-    const moveNames = card.moves
-        .map(a => a.move.name)
-        .join(", ");
-    const modalContent = document.querySelector('.modal');
-
-    modalContent.innerHTML = `
+const renderModalTemplate = (card, abilityNames) => {
+    return `
         <article class="modal-content">
             <hgroup>
                 <h4>${card.name}</h4>
@@ -29,32 +20,60 @@ const buildModalTemplate = (card) => {
             <figure>
                 <img id="img-poke" src="${card.img}" alt="${card.name}">
             </figure>
-            
-            <section class="card-abilities">
-                <dl>
-                    <dt>Abilities:</dt>
-                    <dd>${abilityNames}</dd>
-                </dl>
-            </section>
 
-            <ul class="collapsible">
-                 <li>
-                    <div class="collapsible-header"><i class="material-icons">analytics</i>Stats</div>
-                    <div class="collapsible-body">
-                        <canvas id="statsChart" ></canvas>
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header"><i class="material-icons">sports_martial_arts</i>Moves</div>
-                    <div class="collapsible-body"><span>${moveNames}</span></div>
-                </li>
-            </ul>
+            <section class="modal-tabs row">
+                <div class="col s12 z-depth-0 transparent"> 
+                    <ul class="tabs">
+                        <li class="tab tabs-transparent col s3"><a href="#about">About</a></li>
+                        <li class="tab tabs-transparent col s3"><a class="active" href="#stats">Stats</a></li>
+                    </ul>
+                </div>
+
+                <article id="about" class="card-abilities col s12">
+                    <dl>
+                        <dt>Abilities:</dt><dd>${abilityNames}</dd> 
+                    </dl>
+                    <dl>
+                        <dt>Height:</dt><dd>${card.height} cm</dd> 
+                    </dl>
+                    <dl>
+                        <dt>Weight:</dt><dd>${card.weight} kg</dd> 
+                    </dl>
+                </article>
+                <article id="stats" class="col s12"><canvas id="statsChart" ></canvas></article>
+            </section>
 
             <footer modal-footer>
                 <a href="#!" id="prev" class="waves-effect waves-green btn-flat"><i class="material-icons">chevron_left</i></a>
                 <a href="#!" id="next" class="waves-effect waves-green btn-flat"><i class="material-icons">chevron_right</i></a>
             </footer>
         </article>`;
+}
+
+
+/**
+ * Build modal template.
+ * @function
+ * @loc 13
+ * @param {Array} card - Card data.
+ * @return {String} modalContent - Template string for modal content.
+ */
+const buildModalTemplate = (card, prevHide = false, nextHide = false) => {
+    const abilityNames = card.abilities
+        .map(a => a.ability.name)
+        .join(", ");
+    const moveNames = card.moves
+        .map(a => a.move.name)
+        .join(", ");
+    const modalContent = document.querySelector('.modal');
+
+    modalContent.innerHTML = renderModalTemplate(card, abilityNames);
+
+    const prevBtn = modalContent.querySelector('#prev');
+    const nextBtn = modalContent.querySelector('#next');
+
+    if (prevHide) prevBtn.style.visibility = 'hidden';
+    if (nextHide) nextBtn.style.visibility = 'hidden';
 
     return modalContent;
 }
@@ -129,21 +148,19 @@ const renderStats = (stats) => {
     });
 };
 
-
 /**
- * Initializes the collapsible component (materialize).
- * @function initCollapsible
- * @loc 5
- * @param {String} - Template of modal.
- * 
+ * Initializes the tabs component (Materialize).
+ * @function initTabs
+ * @loc 4
+ * @param {HTMLElement} rootElem - The parent element containing the tabs markup.
  */
-const initCollapsible = (modalContent) => {
+const initTabs = (rootElem) => {
     const modalElem = document.querySelector('#cardModal');
     const modal = M.Modal.getInstance(modalElem) || M.Modal.init(modalElem);
     modal.open();
 
-    const list = modalContent.querySelector('.collapsible');
-    const instance = M.Collapsible.init(list);
+    const tabsElem = rootElem.querySelector('.tabs');
+    M.Tabs.init(tabsElem);
 };
 
 
@@ -157,15 +174,24 @@ const initCollapsible = (modalContent) => {
  * @param {Event} event - The card click event object.
  * @param {Array} cards - The card array.
  */
-export const handleCardClick = (event, cards) => {
+export const handleCardClick = (event, cards, cardsSearch) => {
     const cardTag = event.target.closest('.card');
     const id = parseInt(cardTag.dataset.id);
     const card = cards.find(item => item.id === id);
+    let modalContent = '';
 
-    const modalContent = buildModalTemplate(card);
+    if (cardsSearch.length == 1) {
+        modalContent = buildModalTemplate(card, true, true);
+    } else if (card == cards[cards.length - 1] || card == cardsSearch[cardsSearch.length - 1]) {
+        modalContent = buildModalTemplate(card, false, true);
+    } else if (card == cards[0] || card == cardsSearch[0]) {
+        modalContent = buildModalTemplate(card, true, false);
+    } else {
+        modalContent = buildModalTemplate(card, false, false);
+    }
 
-    initCollapsible(modalContent);
-
+    initTabs(modalContent);
+   
     renderStats(card.stats);
 };
 
@@ -177,10 +203,18 @@ export const handleCardClick = (event, cards) => {
  * @loc 3
  * @param {Array} card - The card array.
  */
-export const changeModal = (card) => {
-    const modalContent = buildModalTemplate(card);
-    
-    initCollapsible(modalContent);
-    
+export const changeModal = (card, cards, cardsSearch) => {
+    let modalContent = '';
+
+    if (card == cards[0] || card == cardsSearch[0]) {
+        modalContent = buildModalTemplate(card, true, false);
+    } else if (card == cards[cards.length - 1] || card == cardsSearch[cardsSearch.length - 1]) {
+        modalContent = buildModalTemplate(card, false, true);
+    } else {
+        modalContent = buildModalTemplate(card, false, false);
+    }
+
+    initTabs(modalContent);
+
     renderStats(card.stats);
 };

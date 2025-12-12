@@ -25,6 +25,7 @@ const CARD_SCHEMA = {
 };
 
 let cards = [];
+let cardsSearch = [];
 let isLoading = false;
 let currentPagesize = 20;
 
@@ -168,7 +169,7 @@ const bindGridEvents = () => {
     document.querySelector('#cardGrid').addEventListener('click', e => {
         const card = e.target.closest('.card');
         if (!card) return;
-        handleCardClick(e, cards);
+        handleCardClick(e, cards, cardsSearch);
     });
 };
 
@@ -187,12 +188,19 @@ const bindModalEvents = () => {
         const cardId = parseInt(cardIdText.replace("#", ""), 10);
         const prevBtn = e.target.closest('#prev'); const nextBtn = e.target.closest('#next');
 
+        let newCard = [];
+        let newId = 0;
+
         if (prevBtn || nextBtn) {
-            const newId = cardId + (prevBtn ? -1 : +1);
-            const newCard = cards.find(c => c.id === newId);
+            newId = cardId + (prevBtn ? -1 : +1);
+            if (cardsSearch.length == 0) {
+                newCard = cards.find(c => c.id === newId);
+            } else {
+                newCard = cardsSearch.find(c => c.id === newId);
+            }
 
             if (newCard) {
-                changeModal(newCard);
+                changeModal(newCard, cards, cardsSearch);
             } else {
                 console.warn("Card not found in current page data");
             }
@@ -223,7 +231,7 @@ const handlePagesizeClick = async (e) => {
     } catch (err) {
         console.error(err);
     } finally {
-       isLoading = false; 
+        isLoading = false;
     }
 };
 
@@ -272,6 +280,7 @@ const bindCloseEvents = () => {
     if (btnClose) {
         btnClose.addEventListener('click', () => {
             inputSearch.value = '';
+            cardsSearch = [];
             renderCards(cards);
         });
     }
@@ -321,12 +330,13 @@ const returnPageNumber = (e) => {
  * Handles click events on pagination links, fetches new data, 
  * and re-renders the cards and the pagination UI.
  * @function handlePaginationClick
- * @loc 13
+ * @loc 14
  * @param {Event} event - The click event object.
  */
 const handlePaginationClick = async (e) => {
     const pageObject = returnPageNumber(e);
     isLoading = true;
+    cardsSearch = [];
 
     $('li.waves-effect').addClass('disabled').removeClass('waves-effect');
     $(pageObject.aTag).parent('li').addClass('active').siblings().removeClass('active');
@@ -380,8 +390,9 @@ const renderPagination = (page, totalPages) => {
 
 /**
  * Renders subset of Poke card data given by search string
+ * * Also binds the modal events to the new subset
  * @function filterPokeCards
- * @loc 9
+ * @loc 10
  * @param {array} pokeData 
  */
 function filterPokeCards(pokeData) {
@@ -396,4 +407,5 @@ function filterPokeCards(pokeData) {
     if (subsetLength == 0) M.toast({ html: 'No Pokèmons with that name found' });
 
     renderCards(subset);
+    cardsSearch = subset;
 }

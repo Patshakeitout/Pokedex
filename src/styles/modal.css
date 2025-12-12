@@ -2,25 +2,26 @@
 
 .modal {
     overflow: none;
-    width: 90vw !important;
+    width: 80vw !important;
     max-width: 450px;
-    max-height: 90vh !important;
+    max-height: 90vh;
+    height: 600px;
 
     -ms-overflow-style: none;
     /* IE und Edge */
     scrollbar-width: none;
     /* Firefox */
 
-    display: flex;
-    justify-content: left;
     background: none;
     border-image: linear-gradient(hsl(55.25deg 84.16% 30.01% / 61%), hsl(50deg 65.08% 59.41% / 60%)) fill 1;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 100vmax rgba(0, 0, 0, .5);
     font-size: 18px;
-    text-align: left;
 }
 
 .modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 16px 16px 12px 16px;
 }
 
@@ -49,6 +50,51 @@ figure {
     padding: 0;
 }
 
+/* Tabs */
+.modal-tabs {
+    flex-grow: 1;
+}
+
+.tabs {
+    background-color: transparent !important;
+}
+
+/* 2. Textfarbe für INAKTIVE Tabs (im Normalzustand) */
+.tabs .tab a:not(.active) {
+    color: rgba(255, 255, 255, 0.7) !important; 
+}
+
+.tabs .tab a.active, 
+.tabs .tab a:hover {
+    color: #E0E0E0 !important;
+    background-color: transparent !important; 
+}
+
+.tabs .indicator {
+    background-color: #E0E0E0 !important;
+}
+
+#about {
+    margin-top: 12px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#about dl {
+    padding: 12px;
+    font-size: 17px;
+}
+
+#about dd {
+    text-transform: none;
+}
+
+.tabs .tab a {
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: none;
+}
+
 /* Abilities*/
 .card-abilities {
     margin: 0;
@@ -74,32 +120,18 @@ figure {
     text-transform: capitalize;
 }
 
-.collapsible-header {
-    background-color: unset;
-    color: var(--color-text-main);
-    font-weight: 500;
+#stats canvas {
+    margin-top: 12px;
+    width: 100% !important;
+    height: auto !important;
 }
-
-.collapsible-header:hover {
-    background-color: #333333;
-    opacity: 0.3;
-    color: var(--color-text-main);
-    font-weight: 500;
-}
-
-
-.collapsible-body span {
-    text-transform: capitalize;
-    color: var(--color-text-main);
-    font-size: 16px;
-}
-
 
 .modal footer {
     display: flex;
     justify-content: space-between;
     background: unset !important;
-    margin-top: 24px;
+    flex-shrink: 0;
+    margin-top: auto;
 }
 
 .btn-flat {
@@ -111,8 +143,8 @@ figure {
     font-size: 42px;
 }
 
-
 /* Dialog polyfill/fallback for browsers that don't fully support <dialog> */
 .modal:not([open]) {
     display: none;
 }
+

@@ -6,7 +6,7 @@
 
 /* --- Card Styles--- */
 .card {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 0.7;
     max-width: 450px;
     width: 100%;
 }
@@ -78,7 +78,7 @@
 
 /* Footer layout */
 .card-grid article footer {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 500;
 }
 

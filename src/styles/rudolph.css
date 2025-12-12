@@ -1,4 +1,3 @@
-/* CONTAINER: Rudolph-Container */
 .rudolph {
     position: fixed;
     top: 0;
@@ -13,24 +12,16 @@
     animation-delay: 15s;
 }
 
-/* GIF-Styling */
 .rudolph-gif {
     width: 50px; 
     height: auto;
     display: block;
 }
 
-/* Keyframes: Nur der 5-sekündige Lauf */
 @keyframes run-only {
-    /* Wichtig: 0% ist die Position RELATIV zum Container-transform (-50px, -50px). 
-       Wir müssen die absolute Position im Viewport definieren. */
-       
-    /* 0% (Start): Absolut gesehen bleibt er an der Startposition (-50px, -50px) */
     0% {
         transform: translate(-50px, -50px); 
     }
-    
-    /* 100% (Ende des Laufs nach 5s): Absolut gesehen ist er am Endpunkt */
     100% {
         transform: translate(calc(100vw + 50px), calc(100vh + 50px));
     }

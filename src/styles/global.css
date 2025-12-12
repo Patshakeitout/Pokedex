@@ -177,6 +177,7 @@ main {
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(253px, 1fr));
+    justify-items: center;
     align-items: center;
     gap: 45px;
     margin: 0 auto;
