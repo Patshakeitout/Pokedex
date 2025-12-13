@@ -50,14 +50,23 @@ header {
 
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 
-    padding: 30px 30px 24px 30px;
+    padding: 24px;
     background-color: var(--bg-dark-surface);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     color: var(--color-text-main);
     margin-bottom: 48px;
 
     transform: translateZ(0);
+}
+
+
+/* Ensure the Figure doesn't have default margins throwing off alignment */
+.logo-title {
+    display: flex;
+    align-items: center;
+    margin: 0; 
 }
 
 #title {
@@ -156,9 +165,11 @@ header .btn {
 }
 
 .section-pagination {
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .pagination {
